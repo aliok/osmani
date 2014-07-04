@@ -13,5 +13,6 @@
     <artifactId>data</artifactId>
     <version>${parent.version}</version>
 
+    <packaging>jar</packaging>
     
 </project>
