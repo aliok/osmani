@@ -25,39 +25,73 @@
                 <h:outputText value="Idle" style="visibility: hidden; height: 20px;"/>
             </f:facet>
 
+            <f:facet name="error">
+                <h:outputText value="Error occurred!" style="color: red; height: 20px;"/>
+            </f:facet>
+
         </p:ajaxStatus>
 
         <h:form prependId="false">
+            <div class="row">
+                <!--static position is required in the following, else position information on canvas is calculated wrong-->
+                <div class="col-md-10" style="position: static;">
+                    <canvas id="annotationCanvas"></canvas>
+                </div>
+                <div class="col-md-2">
+                    <p:panelGrid>
 
-            <p:panelGrid columns="10">
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="currentFile" value="Current File"/>
+                            </p:column>
+                            <p:column>
+                                <h:selectOneMenu id="currentFile" value="#{annotatorData.currentFileId}">
+                                    <f:selectItems value="#{annotator.allFileIds}" var="fileId" itemLabel="#{fileId}"
+                                                   itemValue="#{fileId}"/>
+                                    <p:ajax process="@this" update="@form :scriptContainer"
+                                            listener="#{annotator.onFileSelect}"/>
+                                </h:selectOneMenu>
+                            </p:column>
+                        </p:row>
 
-                <p:outputLabel for="currentFile" value="Current File"/>
-                <h:selectOneMenu id="currentFile" value="#{annotatorData.currentFileId}">
-                    <f:selectItems value="#{annotator.allFileIds}" var="fileId" itemLabel="#{fileId}"
-                                   itemValue="#{fileId}"/>
-                    <p:ajax process="@this" update="@form :scriptContainer" listener="#{annotator.onFileSelect}"/>
-                </h:selectOneMenu>
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="currentPage" value="Current Page"/>
+                            </p:column>
+                            <p:column>
+                                <h:inputText id="currentPage" value="#{annotatorData.currentPageNumber}"
+                                             style="width: 100px;">
+                                    <p:ajax process="@this" update="@form :scriptContainer"
+                                            listener="#{annotator.onPageSelect}"/>
+                                </h:inputText>
+                            </p:column>
+                        </p:row>
 
-                <p:commandLink value="← Previous page" action="#{annotator.previousPage}"
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandLink value="← Previous page" action="#{annotator.previousPage}"
                                                disabled="#{not annotator.previousPageAvailable}"
-                                               process="@this" update="@form :scriptContainer"/>
+                                               process="@this" update="@form :scriptContainer"
+                                               style="float: left;"/>
 
-                <p:outputLabel for="currentPage" value="Current Page"/>
-                <h:inputText id="currentPage" value="#{annotatorData.currentPageNumber}">
-                    <p:ajax process="@this" update="@form :scriptContainer" listener="#{annotator.onPageSelect}"/>
-                </h:inputText>
+                                <p:commandLink value="Next page →" action="#{annotator.nextPage}"
+                                               disabled="#{not annotator.nextPageAvailable}"
+                                               process="@this" update="@form :scriptContainer"
+                                               style="float: right;"/>
+                            </p:column>
+                        </p:row>
 
-                <p:commandLink value="Next page →" action="#{annotator.nextPage}"
-                               disabled="#{not annotator.nextPageAvailable}"
-                               process="@this" update="@form :scriptContainer"/>
+                        <p:row>
+                            <p:column colspan="2">
+                                <p:commandLink value="Force flush" action="#{annotator.forceFlush}"
+                                               process="@this" update="@this"/>
+                            </p:column>
+                        </p:row>
 
-                <p:commandLink value="Force flush" action="#{annotator.forceFlush}"
-                               process="@this" update="@this"/>
-            </p:panelGrid>
+                    </p:panelGrid>
+                </div>
+            </div>
 
-
-            <!--<div id="imagecropper" class="imagecropper"></div>-->
-            <canvas id="canvas"></canvas>
 
         </h:form>
 
@@ -77,31 +111,31 @@
         <h:panelGroup id="scriptContainer">
 
             <script>
-//                annotations are in the following JSON format
-//                var annotations = [
-//                    {
-//                        id: 'asdasdasd',
-//                        'x': 10,
-//                        'y': 20,
-//                        'w': 100,
-//                        'h': 200,
-//                        'textData': {
-//                            'tr_latin': 'Kolay',
-//                            'tr_arabic': ' الف'
-//                        }
-//                    },
-//                    {
-//                        id: 'asdasdasd2',
-//                        'x': 20,
-//                        'y': 30,
-//                        'w': 400,
-//                        'h': 400,
-//                        'textData': {
-//                            'tr_latin': 'Kolay2',
-//                            'tr_arabic': '2 الف'
-//                        }
-//                    }
-//                ];
+                //                annotations are in the following JSON format
+                //                var annotations = [
+                //                    {
+                //                        id: 'asdasdasd',
+                //                        'x': 10,
+                //                        'y': 20,
+                //                        'w': 100,
+                //                        'h': 200,
+                //                        'textData': {
+                //                            'tr_latin': 'Kolay',
+                //                            'tr_arabic': ' الف'
+                //                        }
+                //                    },
+                //                    {
+                //                        id: 'asdasdasd2',
+                //                        'x': 20,
+                //                        'y': 30,
+                //                        'w': 400,
+                //                        'h': 400,
+                //                        'textData': {
+                //                            'tr_latin': 'Kolay2',
+                //                            'tr_arabic': '2 الف'
+                //                        }
+                //                    }
+                //                ];
 
                 var imageSource = "/getImage?fileId=#{annotatorData.currentFileId}&amp;pageNumber=#{annotatorData.currentPageNumber}";
 
@@ -144,7 +178,7 @@
 
                 $(document).ready(function () {
                     window['annotator'] = new Annotator({
-                        'canvasId': 'canvas',
+                        'canvasId': 'annotationCanvas',
                         'imageSource': imageSource,
                         'onAnnotationCreate': createNewAnnotation,
                         'onAnnotationUpdate': updateAnotation,
