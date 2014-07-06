@@ -32,7 +32,7 @@
         <script>
             var annotations = [
                 {
-                    id : 'asdasdasd',
+                    id: 'asdasdasd',
                     'x': 10,
                     'y': 20,
                     'w': 100,
@@ -40,6 +40,17 @@
                     'textData': {
                         'tr_latin': 'Kolay',
                         'tr_arabic': ' الف'
+                    }
+                },
+                {
+                    id: 'asdasdasd2',
+                    'x': 20,
+                    'y': 30,
+                    'w': 400,
+                    'h': 400,
+                    'textData': {
+                        'tr_latin': 'Kolay2',
+                        'tr_arabic': '2 الف'
                     }
                 }
             ];
@@ -69,11 +80,11 @@
                 console.log(annotationId);
             }
 
-            function onAnnotationCreateComplete(xhr,status,args){
-                if(args.annotationId){
+            function onAnnotationCreateComplete(xhr, status, args) {
+                if (args.annotationId) {
                     console.log(args.annotationId);
                     annotator.addAnnotationFromCurrentOne(args.annotationId);
-                }else{
+                } else {
                     alert('Creation failed');
                 }
             }

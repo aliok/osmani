@@ -98,4 +98,8 @@ public class AnnotationDataController implements Serializable {
     public int getNumberOfPagesForCurrentFile(String fileId) {
         return this.pageNumberMap.get(fileId).size();
     }
+
+    public TreeSet<Annotation> getAnnotations(String fileId, int pageNumber) {
+        return this.annotationTable.get(fileId, pageNumber);
+    }
 }

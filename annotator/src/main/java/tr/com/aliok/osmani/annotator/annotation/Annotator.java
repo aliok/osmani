@@ -27,6 +27,8 @@ public class Annotator implements Serializable {
     @ManagedProperty("annotationDataController")
     private AnnotationDataController annotationDataController;
 
+    private final AnnotationJSONFormatter annotationJSONFormatter = new AnnotationJSONFormatter();
+
     public void selectFile(String fileId) throws IOException {
         this.currentFileId = fileId;
         this.currentPageNumber = 0;
@@ -69,7 +71,7 @@ public class Annotator implements Serializable {
     }
 
     public void getAnnotationsJSONForCurrentFileAndPage() {
-        //TODO
+        this.annotationJSONFormatter.getJSON(this.annotationDataController.getAnnotations(this.currentFileId, this.currentPageNumber));
     }
 
     public void createNewAnnotation() {
