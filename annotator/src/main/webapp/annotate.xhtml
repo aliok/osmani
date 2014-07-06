@@ -34,11 +34,11 @@
         <h:form prependId="false">
             <div class="row">
                 <!--static position is required in the following, else position information on canvas is calculated wrong-->
-                <div class="col-md-10" style="position: static;">
+                <div class="col-md-9" style="position: static;">
                     <canvas id="annotationCanvas"></canvas>
                 </div>
-                <div class="col-md-2">
-                    <p:panelGrid>
+                <div class="col-md-3">
+                    <p:panelGrid style="width: 100%;">
 
                         <p:row>
                             <p:column>
@@ -60,10 +60,14 @@
                             </p:column>
                             <p:column>
                                 <h:inputText id="currentPage" value="#{annotatorData.currentPageNumber}"
-                                             style="width: 100px;">
+                                             style="width: 50px;">
                                     <p:ajax process="@this" update="@form :scriptContainer"
                                             listener="#{annotator.onPageSelect}"/>
                                 </h:inputText>
+
+                                <h:outputFormat value="of {0}" style="white-space: nowrap;">
+                                    <f:param value="#{annotator.numberOfPagesForCurrentFile()}"/>
+                                </h:outputFormat>
                             </p:column>
                         </p:row>
 
