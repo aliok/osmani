@@ -1,0 +1,8 @@
+#annotationCanvas{
+    -webkit-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.75);
+    -moz-box-shadow:    4px 4px 11px 0px rgba(50, 50, 50, 0.75);
+    box-shadow:         4px 4px 11px 0px rgba(50, 50, 50, 0.75);
+
+    margin-top: 5px;
+    border: 1px solid rgba(50, 50, 50, 0.75);
+}
