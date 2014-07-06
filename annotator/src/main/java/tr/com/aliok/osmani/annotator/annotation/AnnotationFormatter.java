@@ -55,14 +55,14 @@ public class AnnotationFormatter implements Serializable {
     public Annotation parseLine(String fileId, String line) {
         Validate.isTrue(line.length() == FORMAT_LENGTH, "Expected line length:" + FORMAT_LENGTH + " retrieved : " + line.length() + "\n, line : \n" + line);
 
-        final String annotationId = getString(line, ANNOTATION_ID_INDICES);
-        final int pageNumber = getInteger(line, PAGE_NUMBER_INDICES);
-        final double x = getDouble(line, X_INDICES);
-        final double y = getDouble(line, Y_INDICES);
-        final double w = getDouble(line, W_INDICES);
-        final double h = getDouble(line, H_INDICES);
-        final String tr_arabic = getString(line, TR_ARABIC_INDICES);
-        final String tr_latin = getString(line, TR_LATIN_INDICES);
+        final String annotationId = getStringFroLine(line, ANNOTATION_ID_INDICES);
+        final int pageNumber = getIntegerFromLine(line, PAGE_NUMBER_INDICES);
+        final double x = getDoubleFromLine(line, X_INDICES);
+        final double y = getDoubleFromLine(line, Y_INDICES);
+        final double w = getDoubleFromLine(line, W_INDICES);
+        final double h = getDoubleFromLine(line, H_INDICES);
+        final String tr_arabic = getStringFroLine(line, TR_ARABIC_INDICES);
+        final String tr_latin = getStringFroLine(line, TR_LATIN_INDICES);
 
 
         final Annotation annotation = new AnnotationBuilder()
@@ -80,18 +80,18 @@ public class AnnotationFormatter implements Serializable {
         return annotation;
     }
 
-    private String getString(String line, Pair<Integer, Integer> indices) {
+    private String getStringFroLine(String line, Pair<Integer, Integer> indices) {
         final String substring = line.substring(indices.getLeft(), indices.getRight());
         return substring.trim();
     }
 
-    private int getInteger(String line, Pair<Integer, Integer> indices) {
-        final String string = getString(line, indices);
+    private int getIntegerFromLine(String line, Pair<Integer, Integer> indices) {
+        final String string = getStringFroLine(line, indices);
         return Integer.parseInt(string);
     }
 
-    private double getDouble(String line, Pair<Integer, Integer> indices) {
-        final String string = getString(line, indices);
+    private double getDoubleFromLine(String line, Pair<Integer, Integer> indices) {
+        final String string = getStringFroLine(line, indices);
         return Double.parseDouble(string);
     }
 
