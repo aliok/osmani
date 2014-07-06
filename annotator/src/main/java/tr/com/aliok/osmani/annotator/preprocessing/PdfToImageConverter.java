@@ -29,8 +29,10 @@ public class PdfToImageConverter {
         PDDocument document = null;
         try {
             document = PDDocument.loadNonSeq(sourceFile, null);
-            final int numberOfPages = document.getNumberOfPages();
-            final int digitsForFileName = (int) Math.ceil(Math.log10(numberOfPages));
+
+            // always have 4 digits for image file names
+//            final int numberOfPages = document.getNumberOfPages();
+            final int digitsForFileName = 4; //(int) Math.ceil(Math.log10(numberOfPages));
 
             final String sourceBaseName = FilenameUtils.getBaseName(sourceFile.getName());
 
