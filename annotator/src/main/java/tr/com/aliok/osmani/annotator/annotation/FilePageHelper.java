@@ -10,6 +10,7 @@ import org.apache.commons.io.FilenameUtils;
 import tr.com.aliok.osmani.annotator.commons.AppProperties;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.TreeMap;
 /**
  * @author Ali Ok (ali.ok@apache.org)
  */
-public class FilePageHelper {
+public class FilePageHelper implements Serializable {
     public TreeMap<String, SetUniqueList> buildFilePagesMap() {
         final File bookSourceFolder = new File(AppProperties.bookSourceFolder());
         //noinspection ConstantConditions
