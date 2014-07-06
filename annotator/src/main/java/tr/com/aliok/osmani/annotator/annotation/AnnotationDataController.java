@@ -34,7 +34,7 @@ public class AnnotationDataController implements Serializable {
     // Table<FileID, PageNumber, TreeSet<Annotation>
     // marking specificatlly treeset to mark that it is ordered
     private TreeBasedTable<String, Integer, TreeSet<Annotation>> annotationTable = TreeBasedTable.create();
-    private List<Annotation> toBeFlushed = new ArrayList<>();
+    private int flushCounter = 0;
 
     private final FilePageHelper filePageHelper = new FilePageHelper();
     private final AnnotationFileIOHelper annotationFileIOHelper = new AnnotationFileIOHelper();
@@ -65,16 +65,25 @@ public class AnnotationDataController implements Serializable {
                 .setAnnotationId(annotationId)
                 .createAnnotation();
 
-        toBeFlushed.add(annotation);
+        final TreeSet<Annotation> annotations = annotationTable.get(annotation.getFileId(), annotation.getPageNumber());
+        if (annotations != null) {
+            annotations.add(annotation);
+        } else {
+            final TreeSet<Annotation> objects = Sets.newTreeSet();
+            objects.add(annotation);
+            annotationTable.put(annotation.getFileId(), annotation.getPageNumber(), objects);
+        }
+
         flushIfNecessary();
 
         return annotation;
     }
 
     private void flushIfNecessary() {
-        if (toBeFlushed.size() >= FLUSH_LIMIT) {
+        if (flushCounter >= FLUSH_LIMIT) {
             try {
                 doFlush();
+                flushCounter = 0;
             } catch (IOException e) {
                 // MyFaces uses java.util.logging, this log yourself!
                 log.error(e);
@@ -84,29 +93,12 @@ public class AnnotationDataController implements Serializable {
     }
 
     protected void doFlush() throws IOException {
-        addToBeFlushedListToTable();
         final SortedSet<String> fileIds = this.annotationTable.rowKeySet();
         for (String fileId : fileIds) {
             annotationFileIOHelper.createBackUp(fileId);
             annotationFileIOHelper.writeTableToFile(fileId, annotationTable);
             annotationFileIOHelper.backupCleanUp(fileId);
         }
-    }
-
-
-    private void addToBeFlushedListToTable() {
-        for (Annotation annotation : toBeFlushed) {
-            final TreeSet<Annotation> annotations = annotationTable.get(annotation.getFileId(), annotation.getPageNumber());
-            if (annotations != null) {
-                annotations.add(annotation);
-            } else {
-                final TreeSet<Annotation> objects = Sets.newTreeSet();
-                objects.add(annotation);
-                annotationTable.put(annotation.getFileId(), annotation.getPageNumber(), objects);
-            }
-        }
-
-        toBeFlushed.clear();
     }
 
     public int getNumberOfPagesForCurrentFile(String fileId) {
