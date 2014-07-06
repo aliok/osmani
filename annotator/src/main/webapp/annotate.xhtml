@@ -77,30 +77,35 @@
         <h:panelGroup id="scriptContainer">
 
             <script>
-                var annotations = [
-                    {
-                        id: 'asdasdasd',
-                        'x': 10,
-                        'y': 20,
-                        'w': 100,
-                        'h': 200,
-                        'textData': {
-                            'tr_latin': 'Kolay',
-                            'tr_arabic': ' الف'
-                        }
-                    },
-                    {
-                        id: 'asdasdasd2',
-                        'x': 20,
-                        'y': 30,
-                        'w': 400,
-                        'h': 400,
-                        'textData': {
-                            'tr_latin': 'Kolay2',
-                            'tr_arabic': '2 الف'
-                        }
-                    }
-                ];
+//                annotations are in the following JSON format
+//                var annotations = [
+//                    {
+//                        id: 'asdasdasd',
+//                        'x': 10,
+//                        'y': 20,
+//                        'w': 100,
+//                        'h': 200,
+//                        'textData': {
+//                            'tr_latin': 'Kolay',
+//                            'tr_arabic': ' الف'
+//                        }
+//                    },
+//                    {
+//                        id: 'asdasdasd2',
+//                        'x': 20,
+//                        'y': 30,
+//                        'w': 400,
+//                        'h': 400,
+//                        'textData': {
+//                            'tr_latin': 'Kolay2',
+//                            'tr_arabic': '2 الف'
+//                        }
+//                    }
+//                ];
+
+                var imageSource = "/getImage?fileId=#{annotatorData.currentFileId}&amp;pageNumber=#{annotatorData.currentPageNumber}";
+
+                var annotations = #{annotator.annotationsJSONForCurrentFileAndPage};
 
                 function createNewAnnotation(x, y, w, h, textData) {
                     // sample text data:
@@ -140,7 +145,7 @@
                 $(document).ready(function () {
                     window['annotator'] = new Annotator({
                         'canvasId': 'canvas',
-                        'imageSource': 'http://www.html5canvastutorials.com/demos/assets/darth-vader.jpg',
+                        'imageSource': imageSource,
                         'onAnnotationCreate': createNewAnnotation,
                         'onAnnotationUpdate': updateAnotation,
                         'onAnnotationDelete': deleteAnnotation,

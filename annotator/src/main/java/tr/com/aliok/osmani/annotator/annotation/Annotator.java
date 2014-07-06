@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.UUID;
 
 /**
@@ -75,7 +76,11 @@ public class Annotator implements Serializable {
     }
 
     public String getAnnotationsJSONForCurrentFileAndPage() {
-        return this.annotationJSONFormatter.getJSON(this.annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber()));
+        final TreeSet<Annotation> annotations = this.annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber());
+        if(annotations!=null)
+            return this.annotationJSONFormatter.getJSON(annotations);
+        else
+            return "[]";
     }
 
     public void onFileSelect() throws IOException {
