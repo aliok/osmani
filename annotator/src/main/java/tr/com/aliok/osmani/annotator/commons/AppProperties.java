@@ -18,6 +18,10 @@ public class AppProperties {
         return getString("app.data.folder.book.pages");
     }
 
+    public static String bookAnnotationFolder() {
+            return getString("app.data.folder.book.annotation");
+        }
+
     private static String getString(String key) {
         return (String) getObject(key);
     }
