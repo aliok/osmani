@@ -1,0 +1,2 @@
+#                        Annotation Id   #Pg         X         Y         W         H  TR ARABIC                                           TR LATIN                                           |
+| 12345678-1234-1234-1234-1234567890ab  0010  00010.00  00200.00  00250.00  00300.00  test_arabic                                         test_latin                                         |

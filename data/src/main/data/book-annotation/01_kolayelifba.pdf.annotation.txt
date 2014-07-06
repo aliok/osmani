@@ -1,2 +1,1 @@
-# annotationId                       page           x                y             w          h
-123123123123123123123123123123       0001           123.12           123.12        100        20
+#                        Annotation Id   #Pg         X         Y         W         H  TR ARABIC                                           TR LATIN                                           |
