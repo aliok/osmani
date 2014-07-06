@@ -1,16 +1,19 @@
 package tr.com.aliok.osmani.annotator.annotation;
 
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.primefaces.context.RequestContext;
 import tr.com.aliok.osmani.annotator.model.Annotation;
 
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,57 +24,76 @@ import java.util.UUID;
 @ViewScoped
 public class Annotator implements Serializable {
 
-    private String currentFileId;
-    private int currentPageNumber;
+    @ManagedProperty("#{annotatorData}")
+    private AnnotatorData annotatorData;
 
-    @ManagedProperty("annotationDataController")
+    @ManagedProperty("#{annotationDataController}")
     private AnnotationDataController annotationDataController;
 
     private final AnnotationJSONFormatter annotationJSONFormatter = new AnnotationJSONFormatter();
 
+    @PostConstruct
+    public void initialize() {
+        annotatorData.setCurrentFileId(annotationDataController.getFileIds().iterator().next());
+    }
+
+    public ArrayList<String> getAllFileIds() {
+        return Lists.newArrayList(annotationDataController.getFileIds());
+    }
+
     public void selectFile(String fileId) throws IOException {
-        this.currentFileId = fileId;
-        this.currentPageNumber = 0;
-
+        annotatorData.setCurrentFileId(fileId);
+        annotatorData.setCurrentPageNumber(0);
     }
 
-    public void selectPage(int i) {
-        this.currentPageNumber = i;
+    public String selectPage(int i) {
+        annotatorData.setCurrentPageNumber(i);
+        return null;
     }
 
-    public void nextPage() {
+    public String nextPage() {
         Validate.isTrue(isNextPageAvailable());
-        currentPageNumber++;
+        return selectPage(annotatorData.getCurrentPageNumber() + 1);
     }
 
-    public void previousPage() {
+    public String previousPage() {
         Validate.isTrue(isPreviousPageAvailable());
-        currentPageNumber--;
+        return selectPage(annotatorData.getCurrentPageNumber() - 1);
     }
 
     public boolean isNextPageAvailable() {
         final int numberOfPagesForCurrentFile = numberOfPagesForCurrentFile();
-        return numberOfPagesForCurrentFile - 1 > currentPageNumber;
+        return numberOfPagesForCurrentFile - 1 > annotatorData.getCurrentPageNumber();
     }
 
     public boolean isPreviousPageAvailable() {
-        return currentPageNumber > 0;
-    }
-
-    public int getCurrentPageNumber() {
-        return currentPageNumber;
-    }
-
-    public String getCurrentFileId() {
-        return currentFileId;
+        return annotatorData.getCurrentPageNumber() > 0;
     }
 
     public int numberOfPagesForCurrentFile() {
-        return annotationDataController.getNumberOfPagesForCurrentFile(currentFileId);
+        return annotationDataController.getNumberOfPagesForCurrentFile(annotatorData.getCurrentFileId());
     }
 
-    public void getAnnotationsJSONForCurrentFileAndPage() {
-        this.annotationJSONFormatter.getJSON(this.annotationDataController.getAnnotations(this.currentFileId, this.currentPageNumber));
+    public String getAnnotationsJSONForCurrentFileAndPage() {
+        return this.annotationJSONFormatter.getJSON(this.annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber()));
+    }
+
+    public void onFileSelect() throws IOException {
+        selectFile(annotatorData.getCurrentFileId());
+    }
+
+    public void onPageSelect() {
+        int page = annotatorData.getCurrentPageNumber();
+        if (page < 0)
+            page = 0;
+        if (page >= numberOfPagesForCurrentFile())
+            page = numberOfPagesForCurrentFile() - 1;
+
+        selectPage(page);
+    }
+
+    public void forceFlush() throws IOException {
+        this.annotationDataController.doFlush();
     }
 
     public void createNewAnnotation() {
@@ -104,8 +126,8 @@ public class Annotator implements Serializable {
 
         final String annotationId = UUID.randomUUID().toString();
         RequestContext.getCurrentInstance().addCallbackParam("annotationId", annotationId);
-        final Annotation annotation = annotationDataController.addNew(currentFileId, currentPageNumber, x, y, w, h, tr_latin, tr_arabic, annotationId);
-        System.out.printf("Created : " + annotation.toString());
+        final Annotation annotation = annotationDataController.addNew(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber(), x, y, w, h, tr_latin, tr_arabic, annotationId);
+        System.out.printf("Created : " + annotation.toString() + "\n");
     }
 
     private String getStringRequestParam(Map<String, String> requestParamMap, String key) {
@@ -118,8 +140,15 @@ public class Annotator implements Serializable {
     private int getRequiredIntegerRequestParam(Map<String, String> requestParamMap, String key) {
         final String strVal = requestParamMap.get(key);
         Validate.notNull(strVal);
-        Validate.isTrue(NumberUtils.isDigits(strVal));
+        Validate.isTrue(NumberUtils.isNumber(strVal));
         return Integer.parseInt(strVal);
     }
 
+    public void setAnnotatorData(AnnotatorData annotatorData) {
+        this.annotatorData = annotatorData;
+    }
+
+    public void setAnnotationDataController(AnnotationDataController annotationDataController) {
+        this.annotationDataController = annotationDataController;
+    }
 }

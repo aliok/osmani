@@ -89,7 +89,7 @@ public class AnnotationFileIOHelper implements Serializable {
             @Override
             public boolean apply(String input) {
                 final String name = FilenameUtils.getName(input);
-                return name.startsWith(fileId) && !name.equals(fileId);
+                return name.startsWith(fileId) && !name.equals(fileId+".annotation.txt");
             }
         }));
 
@@ -97,12 +97,12 @@ public class AnnotationFileIOHelper implements Serializable {
             final int toBeDeleted = backupFilesForGiven.size() - BACKUP_CLEANUP_LIMIT;
             int i = 0;
             for (String backupFile : backupFilesForGiven) {
-                final boolean deleted = new File(backupFile).delete();
+                final boolean deleted = new File(FilenameUtils.concat(annotationFolder, backupFile)).delete();
                 if (!deleted)
                     throw new IOException("Cannot delete file : " + backupFile);
 
                 i++;
-                if (toBeDeleted >= i)
+                if (i>toBeDeleted)
                     break;
             }
         }

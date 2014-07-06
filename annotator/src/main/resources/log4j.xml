@@ -25,6 +25,10 @@
         </layout>
     </appender>
 
+    <logger name="org.apache.myfaces">
+        <level value="WARN"/>
+    </logger>
+
     <logger name="tr.com.aliok.osmani">
         <level value="INFO"/>
     </logger>

@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.collect.TreeBasedTable;
 import org.apache.commons.collections.list.SetUniqueList;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import tr.com.aliok.osmani.annotator.model.Annotation;
 import tr.com.aliok.osmani.annotator.model.AnnotationBuilder;
 
@@ -20,6 +22,8 @@ import java.util.*;
 @ManagedBean(name = "annotationDataController")
 @ApplicationScoped
 public class AnnotationDataController implements Serializable {
+    protected Log log = LogFactory.getLog(getClass());
+
 
     private static final int FLUSH_LIMIT = 10;
 
@@ -36,9 +40,15 @@ public class AnnotationDataController implements Serializable {
     private final AnnotationFileIOHelper annotationFileIOHelper = new AnnotationFileIOHelper();
 
     @PostConstruct
-    public void initialize() throws IOException {
-        this.pageNumberMap = filePageHelper.buildFilePagesMap();
-        this.annotationTable = annotationFileIOHelper.readAllFiles();
+    public void initialize() {
+        try {
+            this.pageNumberMap = filePageHelper.buildFilePagesMap();
+            this.annotationTable = annotationFileIOHelper.readAllFiles();
+        } catch (IOException e) { // postConstruct methods cannot have throws expression in the signature
+            // MyFaces uses java.util.logging, this log yourself!
+            log.error(e);
+            throw new RuntimeException(e);
+        }
     }
 
 
@@ -66,12 +76,14 @@ public class AnnotationDataController implements Serializable {
             try {
                 doFlush();
             } catch (IOException e) {
+                // MyFaces uses java.util.logging, this log yourself!
+                log.error(e);
                 throw new RuntimeException(e);
             }
         }
     }
 
-    private void doFlush() throws IOException {
+    protected void doFlush() throws IOException {
         addToBeFlushedListToTable();
         final SortedSet<String> fileIds = this.annotationTable.rowKeySet();
         for (String fileId : fileIds) {
@@ -93,6 +105,8 @@ public class AnnotationDataController implements Serializable {
                 annotationTable.put(annotation.getFileId(), annotation.getPageNumber(), objects);
             }
         }
+
+        toBeFlushed.clear();
     }
 
     public int getNumberOfPagesForCurrentFile(String fileId) {
@@ -101,5 +115,9 @@ public class AnnotationDataController implements Serializable {
 
     public TreeSet<Annotation> getAnnotations(String fileId, int pageNumber) {
         return this.annotationTable.get(fileId, pageNumber);
+    }
+
+    public Set<String> getFileIds() {
+        return this.pageNumberMap.keySet();
     }
 }
