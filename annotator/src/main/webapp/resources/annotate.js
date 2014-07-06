@@ -69,7 +69,7 @@ function Annotator(options) {
         dragging = false;
     });
 
-    self.clearCurrent = function(){
+    self.clearCurrent = function () {
         originX = -1;
         originY = -1;
         width = 0;
@@ -78,9 +78,20 @@ function Annotator(options) {
     };
 
     self.addAnnotationFromCurrentOne = function (annotationId) {
+        // make sure direction of the annotation is left to right and top to bottom
+        if (width < 0) {
+            originX = originX + width;
+            width = -width;
+        }
+
+        if (height < 0) {
+            originY = originY + height;
+            height = -height;
+        }
+
         self.annotations.push(
             {
-                'id' : annotationId,
+                'id': annotationId,
                 'x': originX,
                 'y': originY,
                 'w': width,
@@ -99,6 +110,8 @@ function Annotator(options) {
 
     function redraw() {
         canvas.width = canvas.width; // Clears the canvas
+        $('#annotationDivs').html("");  // Clears it
+
         context.drawImage(imageObj, 0, 0);
 
         //draw current selection (still dragging or dragging done), if any
@@ -113,11 +126,16 @@ function Annotator(options) {
         // draw other annotations
         for (var i = 0; i < self.annotations.length; i++) {
             var annotation = self.annotations[i];
-            context.strokeStyle = "#0000FF";
-            context.beginPath();
-            context.rect(annotation.x, annotation.y, annotation.w, annotation.h);
-            context.lineWidth = 1;
-            context.stroke();
+
+            // draw the div
+            var div = $("<div class='annotationDiv'>TEST</div>");
+            div.attr("data-annotation-id", annotation.id);
+            div.css("left", annotation.x);
+            div.css("top", annotation.y);
+            div.css("width", annotation.w);
+            div.css("height", annotation.h);
+
+            $('#annotationDivs').append(div);
         }
     }
 
