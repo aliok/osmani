@@ -12,12 +12,36 @@
     position: absolute;
 }
 
-.annotationDiv {
+.annotationOutline, .annotationOverlay {
     position: absolute;
     display: inline-block;
-    border: 1px solid #2222cc;
+}
 
+.annotationOutline {
+    border: 1px solid #2222cc;
+}
+
+.annotationOverlay {
+    background-color: #ffcc22;
+    border: 1px solid black;
+    border-top: none;
+}
+
+.annotationOverlay {
+    display: none;
     -webkit-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.75);
     box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.75);
+}
+
+.annotationOutline.hover {
+    -webkit-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.15);
+    -moz-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.15);
+    box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.15);
+    border-bottom: none;
+}
+
+.text,
+.text span {
+    white-space: nowrap;
 }

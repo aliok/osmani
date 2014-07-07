@@ -127,17 +127,57 @@ function Annotator(options) {
         for (var i = 0; i < self.annotations.length; i++) {
             var annotation = self.annotations[i];
 
-            // draw the div
-            var div = $("<div class='annotationDiv'>TEST</div>");
-            div.attr("data-annotation-id", annotation.id);
-            div.css("left", annotation.x);
-            div.css("top", annotation.y);
-            div.css("width", annotation.w);
-            div.css("height", annotation.h);
+            // draw the outline
+            var annotationOutlineDiv = $("<div class='annotationOutline'></div>");
+            annotationOutlineDiv.attr("data-annotation-id", annotation.id);
 
-            $('#annotationDivs').append(div);
+            annotationOutlineDiv.css("height", annotation.h);
+            annotationOutlineDiv.css("left", annotation.x);
+            annotationOutlineDiv.css("top", annotation.y);
+            annotationOutlineDiv.css("width", annotation.w);
+
+            // draw the overlay
+            var annotationOverlayDiv = $(
+                    "<div class='annotationOverlay'>" +
+                    "<div class='text'>" +
+                    "<span>TR Arabic:</span><span class='tr_arabic'></span>" +
+                    "<br/>" +
+                    "<span>TR Latin:</span><span class='tr_latin'></span>" +
+                    "</div>" +
+                    "</div>");
+            annotationOverlayDiv.attr("data-annotation-id", annotation.id);
+            annotationOverlayDiv.find('.tr_arabic').html(annotation.textData.tr_arabic);
+            annotationOverlayDiv.find('.tr_latin').html(annotation.textData.tr_latin);
+
+            annotationOverlayDiv.css("left", annotation.x);
+            annotationOverlayDiv.css("top", annotation.y + annotation.h);
+            annotationOverlayDiv.css("min-width", annotation.w);
+            annotationOverlayDiv.css("width", "auto");
+            annotationOverlayDiv.css("height", "auto");
+
+            // create a wrapper for annotation overlay and outline
+            var wrapper = $("<div></div>");
+
+            wrapper.append(annotationOutlineDiv);
+            wrapper.append(annotationOverlayDiv);
+
+            $('#annotationDivs').append(wrapper);
         }
     }
+
+    $(document).on("mouseover", "div.annotationOutline", function () {
+        var self = $(this);
+        self.addClass('hover');
+        self.siblings('.annotationOverlay').css('z-index', 5);
+        self.siblings('.annotationOverlay').show();
+    });
+
+    $(document).on("mouseout", "div.annotationOutline", function () {
+        var self = $(this);
+        self.removeClass('hover');
+        self.siblings('.annotationOverlay').css('z-index', 0);
+        self.siblings('.annotationOverlay').hide();
+    });
 
 
     self.show = function () {
