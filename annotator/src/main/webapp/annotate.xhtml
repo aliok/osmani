@@ -31,7 +31,7 @@
 
     </p:ajaxStatus>
 
-    <h:form prependId="false">
+    <h:form id="sideForm" prependId="false">
         <div class="row">
             <!--static position is required in the following, else position information on canvas is calculated wrong-->
             <div class="col-md-9" style="position: static;">
@@ -94,6 +94,45 @@
                     </p:row>
 
                 </p:panelGrid>
+
+                <br/>
+                <br/>
+
+                <h:panelGroup id="annotationInputContainer">
+                    <p:focus for="tr_arabic"/>
+                    <p:panelGrid columns="1" rendered="#{not empty annotationForm.current}">
+                        <h:outputLabel value="Id"/>
+                        <h:outputText value="#{annotationForm.current.annotationId}"/>
+
+                        <h:outputLabel value="TR_ARABIC"/>
+                        <h:inputText id="tr_arabic" required="true" value="#{annotationForm.current.tr_arabic}" dir="RTL"/>
+
+                        <h:outputLabel value="TR_LATIN"/>
+                        <h:inputText value="#{annotationForm.current.tr_latin}"/>
+
+                        <h:outputLabel value="x"/>
+                        <h:inputText value="#{annotationForm.current.x}" required="true"/>
+
+                        <h:outputLabel value="y"/>
+                        <h:inputText value="#{annotationForm.current.y}" required="true"/>
+
+                        <h:outputLabel value="w"/>
+                        <h:inputText value="#{annotationForm.current.w}" required="true"/>
+
+                        <h:outputLabel value="h"/>
+                        <h:inputText value="#{annotationForm.current.h}" required="true"/>
+
+                        <p:outputPanel>
+                            <p:commandButton value="Delete" action="#{annotationForm.delete}" process="@this"
+                                             update="@form :scriptContainer"/>
+                            <p:commandButton id="saveButton" value="Save" action="#{annotationForm.save}" process="@this"
+                                             update="@form :scriptContainer"/>
+                        </p:outputPanel>
+                    </p:panelGrid>
+
+                    <p:defaultCommand target="saveButton" />
+
+                </h:panelGroup>
             </div>
         </div>
 
@@ -106,6 +145,9 @@
         <p:remoteCommand name="createNewAnnotationBridge" actionListener="#{annotator.createNewAnnotation}"
                          update="@none" process="@this"
                          oncomplete="onAnnotationCreateComplete(xhr,status,args);"/>
+
+        <p:remoteCommand name="selectAnnotationBridge" actionListener="#{annotationForm.selectAnnotation}"
+                         update=":sideForm:annotationInputContainer" process="@this"/>
     </h:form>
 
 </ui:define>
@@ -162,6 +204,12 @@
                 ]);
             }
 
+            function selectAnnotation(annotationId) {
+                selectAnnotationBridge([
+                    {name: 'annotationId', value: annotationId}
+                ]);
+            }
+
             function updateAnotation(annotationId, textData) {
                 console.log(annotationId);
                 console.log(textData)
@@ -173,21 +221,18 @@
 
             function onAnnotationCreateComplete(xhr, status, args) {
                 if (args.annotationId) {
-                    console.log(args.annotationId);
                     annotator.addAnnotationFromCurrentOne(args.annotationId);
                 } else {
                     alert('Creation failed');
                 }
             }
 
-
             $(document).ready(function () {
                 window['annotator'] = new Annotator({
                     'canvasId': 'annotationCanvas',
                     'imageSource': imageSource,
                     'onAnnotationCreate': createNewAnnotation,
-                    'onAnnotationUpdate': updateAnotation,
-                    'onAnnotationDelete': deleteAnnotation,
+                    'onAnnotationSelect': selectAnnotation,
                     'annotations': annotations
                 });
 

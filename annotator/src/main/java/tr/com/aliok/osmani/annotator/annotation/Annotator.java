@@ -102,7 +102,7 @@ public class Annotator implements Serializable {
     }
 
     public void createNewAnnotation() {
-        Map<String, String> requestParamMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        final Map<String, String> requestParamMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         int x = getRequiredIntegerRequestParam(requestParamMap, "x");
         int y = getRequiredIntegerRequestParam(requestParamMap, "y");
         int w = getRequiredIntegerRequestParam(requestParamMap, "w");

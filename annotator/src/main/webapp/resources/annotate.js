@@ -106,6 +106,8 @@ function Annotator(options) {
         self.clearCurrent();
 
         redraw();
+
+        $('.annotationOutline[data-annotation-id=' + annotationId + ']').click();
     };
 
     function redraw() {
@@ -163,20 +165,34 @@ function Annotator(options) {
 
             $('#annotationDivs').append(wrapper);
         }
+
+//        if(dragging){
+//            $('#annotationDivs').find('.annotationOutline').hide();
+//        }
     }
 
-    $(document).on("mouseover", "div.annotationOutline", function () {
+    $(document).on("mouseover", "div.annotationOutline", function (e) {
         var self = $(this);
         self.addClass('hover');
         self.siblings('.annotationOverlay').css('z-index', 5);
         self.siblings('.annotationOverlay').show();
     });
 
-    $(document).on("mouseout", "div.annotationOutline", function () {
+    $(document).on("mouseout", "div.annotationOutline", function (e) {
         var self = $(this);
         self.removeClass('hover');
         self.siblings('.annotationOverlay').css('z-index', 0);
         self.siblings('.annotationOverlay').hide();
+    });
+
+    $(document).on("click", "div.annotationOutline", function () {
+        if (dragging)
+            return false;
+        var self = $(this);
+        self.addClass('selected');
+        self.siblings('.annotationOverlay').css('z-index', 5);
+        self.siblings('.annotationOverlay').show();
+        options.onAnnotationSelect(self.attr('data-annotation-id'));
     });
 
 

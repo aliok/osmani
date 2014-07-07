@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.collect.TreeBasedTable;
 import org.apache.commons.collections.list.SetUniqueList;
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import tr.com.aliok.osmani.annotator.model.Annotation;
@@ -79,7 +80,7 @@ public class AnnotationDataController implements Serializable {
         return annotation;
     }
 
-    private void flushIfNecessary() {
+    public void flushIfNecessary() {
         if (flushCounter >= FLUSH_LIMIT) {
             try {
                 doFlush();
@@ -111,5 +112,23 @@ public class AnnotationDataController implements Serializable {
 
     public Set<String> getFileIds() {
         return this.pageNumberMap.keySet();
+    }
+
+    public void delete(Annotation annotation) {
+        try {
+            final TreeSet<Annotation> annotations = annotationTable.get(annotation.getFileId(), annotation.getPageNumber());
+            Validate.notNull(annotations);
+
+            final boolean removed = annotations.remove(annotation);
+            Validate.isTrue(removed, "Annotation not found! " + annotation);
+        } catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
+    }
+
+    public void increaseCounter() {
+        this.flushCounter++;
+
     }
 }
