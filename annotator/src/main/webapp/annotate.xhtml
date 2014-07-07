@@ -12,6 +12,9 @@
 
 <ui:define name="content">
 
+    #{annotator.initialize()}
+    #{annotationForm.initialize()}
+
     <p:ajaxStatus>
         <f:facet name="default">
             <h:outputText value="Idle" style="visibility: hidden; height: 20px;"/>
@@ -98,39 +101,71 @@
                 <br/>
                 <br/>
 
+                <p:panelGrid columns="2">
+                    <h:outputLabel for="batchModeCheckBox" value="Batch mode"/>
+                    <h:selectBooleanCheckbox id="batchModeCheckBox" value="#{annotatorData.batchMode}">
+                        <p:ajax process="@this" update="@form :scriptContainer"/>
+                    </h:selectBooleanCheckbox>
+
+                    <h:outputLabel id="ignoreEmptyLatinCheckBoxLabel" for="ignoreEmptyLatinCheckBox"
+                                   value="Ignore empty latin"/>
+                    <h:selectBooleanCheckbox id="ignoreEmptyLatinCheckBox" disabled="#{not annotatorData.batchMode}"
+                                             value="#{annotatorData.ignoreEmptyLatin}">
+                        <p:ajax process="@this" update="@form :scriptContainer"/>
+                    </h:selectBooleanCheckbox>
+                </p:panelGrid>
+
+
+                <br/>
+                <br/>
+
                 <h:panelGroup id="annotationInputContainer">
-                    <p:focus for="tr_arabic"/>
-                    <p:panelGrid columns="1" rendered="#{not empty annotationForm.current}">
-                        <h:outputLabel value="Id"/>
-                        <h:outputText value="#{annotationForm.current.annotationId}"/>
+                    <p:growl showSummary="true"/>
 
-                        <h:outputLabel value="TR_ARABIC"/>
-                        <h:inputText id="tr_arabic" required="true" value="#{annotationForm.current.tr_arabic}" dir="RTL"/>
+                    <p:focus for="tr_arabic"
+                             rendered="#{empty annotatorData.current.tr_arabic or not empty annotatorData.current.tr_latin}"/>
+                    <p:focus for="tr_latin"
+                             rendered="#{not empty annotatorData.current.tr_arabic and empty annotatorData.current.tr_latin}"/>
 
-                        <h:outputLabel value="TR_LATIN"/>
-                        <h:inputText value="#{annotationForm.current.tr_latin}"/>
+                    <p:panelGrid columns="1" rendered="#{not empty annotatorData.current}">
+                        <h:outputText value="Id"/>
+                        <h:outputText value="#{annotatorData.current.annotationId}"/>
 
-                        <h:outputLabel value="x"/>
-                        <h:inputText value="#{annotationForm.current.x}" required="true"/>
+                        <h:outputText value="TR_ARABIC"/>
+                        <h:inputText id="tr_arabic" value="#{annotatorData.current.tr_arabic}"
+                                     dir="RTL"/>
 
-                        <h:outputLabel value="y"/>
-                        <h:inputText value="#{annotationForm.current.y}" required="true"/>
+                        <h:outputText value="TR_LATIN"/>
+                        <h:inputText id="tr_latin" value="#{annotatorData.current.tr_latin}"/>
 
-                        <h:outputLabel value="w"/>
-                        <h:inputText value="#{annotationForm.current.w}" required="true"/>
+                        <h:outputText value="x"/>
+                        <h:inputText value="#{annotatorData.current.x}"/>
 
-                        <h:outputLabel value="h"/>
-                        <h:inputText value="#{annotationForm.current.h}" required="true"/>
+                        <h:outputText value="y"/>
+                        <h:inputText value="#{annotatorData.current.y}"/>
+
+                        <h:outputText value="w"/>
+                        <h:inputText value="#{annotatorData.current.w}"/>
+
+                        <h:outputText value="h"/>
+                        <h:inputText value="#{annotatorData.current.h}"/>
 
                         <p:outputPanel>
                             <p:commandButton value="Delete" action="#{annotationForm.delete}" process="@this"
                                              update="@form :scriptContainer"/>
-                            <p:commandButton id="saveButton" value="Save" action="#{annotationForm.save}" process="@this"
+                            <p:commandButton id="saveButton" value="Save" action="#{annotationForm.save}"
+                                             process="annotationInputContainer"
+                                             update="@form :scriptContainer"/>
+                            <p:commandButton id="saveAndNextButton" value="Save and Next"
+                                             action="#{annotationForm.saveAndNext}" process="annotationInputContainer"
                                              update="@form :scriptContainer"/>
                         </p:outputPanel>
                     </p:panelGrid>
 
-                    <p:defaultCommand target="saveButton" />
+                    <p:defaultCommand target="saveButton"
+                                      rendered="#{not annotationForm.hasNextAnnotation or not annotatorData.batchMode}"/>
+                    <p:defaultCommand target="saveAndNextButton"
+                                      rendered="#{annotationForm.hasNextAnnotation and annotatorData.batchMode}"/>
 
                 </h:panelGroup>
             </div>
@@ -169,7 +204,8 @@
             //                        'textData': {
             //                            'tr_latin': 'Kolay',
             //                            'tr_arabic': ' الف'
-            //                        }
+            //                        },
+            //                          'selected' : true
             //                    },
             //                    {
             //                        id: 'asdasdasd2',

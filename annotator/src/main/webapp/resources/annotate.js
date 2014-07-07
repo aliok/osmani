@@ -36,9 +36,6 @@ function Annotator(options) {
 
         dragging = true;
 
-        tr_latin = 'tr';
-        tr_arabic = ' الف';
-
         redraw();
     });
 
@@ -110,6 +107,10 @@ function Annotator(options) {
         $('.annotationOutline[data-annotation-id=' + annotationId + ']').click();
     };
 
+    function clearSelection() {
+        $('.annotationOutlineWrapper.selected').removeClass('selected');
+    }
+
     function redraw() {
         canvas.width = canvas.width; // Clears the canvas
         $('#annotationDivs').html("");  // Clears it
@@ -121,7 +122,7 @@ function Annotator(options) {
             context.strokeStyle = "#FF0000";
             context.beginPath();
             context.rect(originX, originY, width, height);
-            context.lineWidth = 3;
+            context.lineWidth = 1;
             context.stroke();
         }
 
@@ -135,7 +136,7 @@ function Annotator(options) {
 
             annotationOutlineDiv.css("height", annotation.h);
             annotationOutlineDiv.css("left", annotation.x);
-            annotationOutlineDiv.css("top", annotation.y);
+            annotationOutlineDiv.css("top", annotation.y + 5);
             annotationOutlineDiv.css("width", annotation.w);
 
             // draw the overlay
@@ -152,13 +153,25 @@ function Annotator(options) {
             annotationOverlayDiv.find('.tr_latin').html(annotation.textData.tr_latin);
 
             annotationOverlayDiv.css("left", annotation.x);
-            annotationOverlayDiv.css("top", annotation.y + annotation.h);
+            annotationOverlayDiv.css("top", annotation.y + annotation.h + 5);
             annotationOverlayDiv.css("min-width", annotation.w);
             annotationOverlayDiv.css("width", "auto");
             annotationOverlayDiv.css("height", "auto");
 
             // create a wrapper for annotation overlay and outline
-            var wrapper = $("<div></div>");
+            var wrapper = $("<div class='annotationOutlineWrapper'></div>");
+
+            if (annotation.selected) {
+                wrapper.addClass('selected');
+            }
+
+            if(!annotation.textData.tr_arabic){
+                wrapper.addClass('noArabic');
+            }
+
+            if(!annotation.textData.tr_latin){
+                wrapper.addClass('noLatin');
+            }
 
             wrapper.append(annotationOutlineDiv);
             wrapper.append(annotationOverlayDiv);
@@ -172,27 +185,22 @@ function Annotator(options) {
     }
 
     $(document).on("mouseover", "div.annotationOutline", function (e) {
-        var self = $(this);
-        self.addClass('hover');
-        self.siblings('.annotationOverlay').css('z-index', 5);
-        self.siblings('.annotationOverlay').show();
+        var outlineDiv = $(this);
+        outlineDiv.parent('.annotationOutlineWrapper').addClass('hover');
     });
 
     $(document).on("mouseout", "div.annotationOutline", function (e) {
-        var self = $(this);
-        self.removeClass('hover');
-        self.siblings('.annotationOverlay').css('z-index', 0);
-        self.siblings('.annotationOverlay').hide();
+        var outlineDiv = $(this);
+        outlineDiv.parent('.annotationOutlineWrapper').removeClass('hover');
     });
 
     $(document).on("click", "div.annotationOutline", function () {
         if (dragging)
             return false;
-        var self = $(this);
-        self.addClass('selected');
-        self.siblings('.annotationOverlay').css('z-index', 5);
-        self.siblings('.annotationOverlay').show();
-        options.onAnnotationSelect(self.attr('data-annotation-id'));
+        clearSelection();
+        var outlineDiv = $(this);
+        outlineDiv.parent('.annotationOutlineWrapper').addClass('selected');
+        options.onAnnotationSelect(outlineDiv.attr('data-annotation-id'));
     });
 
 

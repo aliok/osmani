@@ -1,5 +1,6 @@
 package tr.com.aliok.osmani.annotator.annotation;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -13,7 +14,7 @@ import java.util.TreeSet;
  * @author Ali Ok (ali.ok@apache.org)
  */
 public class AnnotationJSONFormatter implements Serializable {
-    public String getJSON(TreeSet<Annotation> annotations) {
+    public String getJSON(TreeSet<Annotation> annotations, Annotation current) {
         /*
         expected result:
 
@@ -27,7 +28,8 @@ public class AnnotationJSONFormatter implements Serializable {
                 'textData': {
                     'tr_latin': 'Kolay',
                     'tr_arabic': ' الف'
-                }
+                },
+                'selected' : true
             },
             {
                 id: 'asdasdasd2',
@@ -49,8 +51,8 @@ public class AnnotationJSONFormatter implements Serializable {
 
         for (Annotation annotation : annotations) {
             final JsonObject textData = new JsonObject();
-            textData.add("tr_arabic", new JsonPrimitive(annotation.getTr_arabic()));
-            textData.add("tr_latin", new JsonPrimitive(annotation.getTr_latin()));
+            textData.add("tr_arabic", new JsonPrimitive(Strings.nullToEmpty(annotation.getTr_arabic())));
+            textData.add("tr_latin", new JsonPrimitive(Strings.nullToEmpty(annotation.getTr_latin())));
 
             final JsonObject jsonObject = new JsonObject();
             jsonObject.add("id", new JsonPrimitive(annotation.getAnnotationId()));
@@ -59,6 +61,8 @@ public class AnnotationJSONFormatter implements Serializable {
             jsonObject.add("w", new JsonPrimitive(annotation.getW()));
             jsonObject.add("h", new JsonPrimitive(annotation.getH()));
             jsonObject.add("textData", textData);
+            if(current!=null)
+                jsonObject.add("selected", new JsonPrimitive(annotation.getAnnotationId().equals(current.getAnnotationId())));
 
             jsonArray.add(jsonObject);
         }

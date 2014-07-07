@@ -10,15 +10,15 @@ import java.io.Serializable;
  */
 public class Annotation implements Serializable, Comparable {
 
-    private final String fileId;
-    private final int pageNumber;
-    private final double x;
-    private final double y;
-    private final double w;
-    private final double h;
-    private final String tr_latin;
-    private final String tr_arabic;
-    private final String annotationId;
+    private String fileId;
+    private int pageNumber;
+    private double x;
+    private double y;
+    private double w;
+    private double h;
+    private String tr_latin;
+    private String tr_arabic;
+    private String annotationId;
 
     Annotation(String fileId, int pageNumber, double x, double y, double w, double h, String tr_latin, String tr_arabic, String annotationId) {
         this.fileId = fileId;
@@ -66,6 +66,42 @@ public class Annotation implements Serializable, Comparable {
 
     public String getAnnotationId() {
         return annotationId;
+    }
+
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
+    }
+
+    public void setPageNumber(int pageNumber) {
+        this.pageNumber = pageNumber;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setW(double w) {
+        this.w = w;
+    }
+
+    public void setH(double h) {
+        this.h = h;
+    }
+
+    public void setTr_latin(String tr_latin) {
+        this.tr_latin = tr_latin;
+    }
+
+    public void setTr_arabic(String tr_arabic) {
+        this.tr_arabic = tr_arabic;
+    }
+
+    public void setAnnotationId(String annotationId) {
+        this.annotationId = annotationId;
     }
 
     @Override

@@ -22,28 +22,43 @@
     cursor: pointer;
 }
 
-.annotationOutline.selected {
-    border: 2px solid red;
-}
-
 .annotationOverlay {
     background-color: #ffcc22;
     border: 1px solid black;
     border-top: none;
-}
-
-.annotationOverlay {
     display: none;
     -webkit-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.75);
     box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.75);
 }
 
-.annotationOutline.hover {
+.annotationOutlineWrapper.selected .annotationOutline {
+    /*border: 2px solid black;*/
+}
+
+.annotationOutlineWrapper.hover .annotationOutline {
     -webkit-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.15);
     -moz-box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.15);
     box-shadow: 4px 4px 11px 0px rgba(50, 50, 50, 0.15);
-    border-bottom: none;
+    border: 2px solid blue;
+}
+
+.annotationOutlineWrapper.hover .annotationOverlay,
+.annotationOutlineWrapper.selected .annotationOverlay {
+    z-index: 5;
+    display: block;
+}
+
+.annotationOutlineWrapper.noArabic .annotationOutline {
+    border: 1px solid red;
+}
+
+.annotationOutlineWrapper.noLatin .annotationOutline {
+    border: 1px solid orange;
+}
+
+.annotationOutlineWrapper.noArabic.noLatin .annotationOutline {
+    border: 1px solid red;
 }
 
 .text,

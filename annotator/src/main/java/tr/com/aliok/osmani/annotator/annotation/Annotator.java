@@ -3,6 +3,8 @@ package tr.com.aliok.osmani.annotator.annotation;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.primefaces.context.RequestContext;
 import tr.com.aliok.osmani.annotator.model.Annotation;
 
@@ -24,6 +26,7 @@ import java.util.UUID;
 @ManagedBean(name = "annotator")
 @ViewScoped
 public class Annotator implements Serializable {
+    protected Log log = LogFactory.getLog(getClass());
 
     @ManagedProperty("#{annotatorData}")
     private AnnotatorData annotatorData;
@@ -33,9 +36,9 @@ public class Annotator implements Serializable {
 
     private final AnnotationJSONFormatter annotationJSONFormatter = new AnnotationJSONFormatter();
 
-    @PostConstruct
-    public void initialize() {
+    public String initialize() {
         annotatorData.setCurrentFileId(annotationDataController.getFileIds().iterator().next());
+        return "";
     }
 
     public ArrayList<String> getAllFileIds() {
@@ -76,11 +79,16 @@ public class Annotator implements Serializable {
     }
 
     public String getAnnotationsJSONForCurrentFileAndPage() {
-        final TreeSet<Annotation> annotations = this.annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber());
-        if(annotations!=null)
-            return this.annotationJSONFormatter.getJSON(annotations);
-        else
-            return "[]";
+        try {
+            final TreeSet<Annotation> annotations = this.annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber());
+            if (annotations != null)
+                return this.annotationJSONFormatter.getJSON(annotations, this.annotatorData.getCurrent());
+            else
+                return "[]";
+        } catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
     }
 
     public void onFileSelect() throws IOException {

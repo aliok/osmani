@@ -1,5 +1,7 @@
 package tr.com.aliok.osmani.annotator.annotation;
 
+import tr.com.aliok.osmani.annotator.model.Annotation;
+
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import java.io.Serializable;
@@ -13,6 +15,11 @@ public class AnnotatorData implements Serializable {
 
     private String currentFileId;
     private int currentPageNumber;
+
+    private Annotation current;
+
+    private boolean batchMode = true;
+    private boolean ignoreEmptyLatin = true;
 
     public String getCurrentFileId() {
         return currentFileId;
@@ -28,5 +35,29 @@ public class AnnotatorData implements Serializable {
 
     public void setCurrentPageNumber(int currentPageNumber) {
         this.currentPageNumber = currentPageNumber;
+    }
+
+    public boolean isBatchMode() {
+        return batchMode;
+    }
+
+    public void setBatchMode(boolean batchMode) {
+        this.batchMode = batchMode;
+    }
+
+    public boolean isIgnoreEmptyLatin() {
+        return ignoreEmptyLatin;
+    }
+
+    public void setIgnoreEmptyLatin(boolean ignoreEmptyLatin) {
+        this.ignoreEmptyLatin = ignoreEmptyLatin;
+    }
+
+    public Annotation getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(Annotation current) {
+        this.current = current;
     }
 }
