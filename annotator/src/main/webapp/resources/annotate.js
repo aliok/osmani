@@ -33,6 +33,8 @@ function Annotator(options) {
     $(document).off('mouseout');
     $(document).off('click');
 
+    $('#annotationDivs').html("");  // Clears it
+
     $(canvas).mousedown(function (e) {
         var mouseX = e.pageX - this.offsetLeft;
         var mouseY = e.pageY - this.offsetTop;
@@ -220,9 +222,9 @@ function Annotator(options) {
             var annotationOverlayDiv = $(
                     "<div class='annotationOverlay'>" +
                     "<div class='text'>" +
-                    "<span>TR Arabic:</span><span class='tr_arabic'></span>" +
+                    "<span>TR Arabic : </span><span class='tr_arabic'></span>" +
                     "<br/>" +
-                    "<span>TR Latin:</span><span class='tr_latin'></span>" +
+                    "<span>TR Latin : </span><span class='tr_latin'></span>" +
                     "</div>" +
                     "</div>");
             annotationOverlayDiv.attr("data-annotation-id", annotation.id);
