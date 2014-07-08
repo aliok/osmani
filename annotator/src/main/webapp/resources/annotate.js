@@ -130,6 +130,17 @@ function Annotator(options) {
         for (var i = 0; i < self.annotations.length; i++) {
             var annotation = self.annotations[i];
 
+            // draw delete button
+            var deleteButtonDiv = $("<div class='annotationDeleteButtonDiv'>" +
+                "<span class='annotationDeleteButton glyphicon glyphicon-remove'></span>" +
+                "</div>");
+
+            deleteButtonDiv.attr("data-annotation-id", annotation.id);
+            deleteButtonDiv.css("left", annotation.x);
+            deleteButtonDiv.css("top", annotation.y + 5);
+            deleteButtonDiv.css("height", 10);
+            deleteButtonDiv.css("width", annotation.w);
+
             // draw the outline
             var annotationOutlineDiv = $("<div class='annotationOutline'></div>");
             annotationOutlineDiv.attr("data-annotation-id", annotation.id);
@@ -165,14 +176,15 @@ function Annotator(options) {
                 wrapper.addClass('selected');
             }
 
-            if(!annotation.textData.tr_arabic){
+            if (!annotation.textData.tr_arabic) {
                 wrapper.addClass('noArabic');
             }
 
-            if(!annotation.textData.tr_latin){
+            if (!annotation.textData.tr_latin) {
                 wrapper.addClass('noLatin');
             }
 
+            wrapper.append(deleteButtonDiv);
             wrapper.append(annotationOutlineDiv);
             wrapper.append(annotationOverlayDiv);
 
@@ -191,7 +203,7 @@ function Annotator(options) {
 
     $(document).on("mouseout", "div.annotationOutline", function (e) {
         var outlineDiv = $(this);
-        outlineDiv.parent('.annotationOutlineWrapper').removeClass('hover');
+        setTimeout(function(){outlineDiv.parent('.annotationOutlineWrapper').removeClass('hover');},1000);
     });
 
     $(document).on("click", "div.annotationOutline", function () {
@@ -203,6 +215,11 @@ function Annotator(options) {
         options.onAnnotationSelect(outlineDiv.attr('data-annotation-id'));
     });
 
+    $(document).on("click", "span.annotationDeleteButton", function () {
+        console.log('asdasd');
+        var deleteButton = $(this);
+        options.onAnnotationDelete(deleteButton.parent('.annotationDeleteButtonDiv').attr('data-annotation-id'));
+    });
 
     self.show = function () {
 

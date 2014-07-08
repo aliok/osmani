@@ -12,9 +12,16 @@
     position: absolute;
 }
 
-.annotationOutline, .annotationOverlay {
+.annotationDeleteButtonDiv, .annotationOutline, .annotationOverlay {
     position: absolute;
     display: inline-block;
+}
+
+.annotationDeleteButtonDiv{
+    display: none;
+    text-align: right;
+    z-index: 10;
+    cursor: pointer;
 }
 
 .annotationOutline {
@@ -46,6 +53,11 @@
 .annotationOutlineWrapper.hover .annotationOverlay,
 .annotationOutlineWrapper.selected .annotationOverlay {
     z-index: 5;
+    display: block;
+}
+
+.annotationOutlineWrapper.hover .annotationDeleteButtonDiv,
+.annotationOutlineWrapper.selected .annotationDeleteButtonDiv {
     display: block;
 }
 

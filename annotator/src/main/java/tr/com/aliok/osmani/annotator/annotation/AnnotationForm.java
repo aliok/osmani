@@ -33,7 +33,7 @@ public class AnnotationForm implements Serializable {
 
     public String initialize() {
         final TreeSet<Annotation> annotations = annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber());
-        if(annotations!=null && !annotations.isEmpty())
+        if (annotations != null && !annotations.isEmpty())
             this.annotatorData.setCurrent(annotations.iterator().next());
         return "";
     }
@@ -53,6 +53,26 @@ public class AnnotationForm implements Serializable {
             }
 
             Validate.notNull(annotatorData.getCurrent());
+        } catch (Exception e) {
+            log.error(e);
+            throw e;
+        }
+    }
+
+    public void deleteGivenAnnotation() {
+        try {
+            final Map<String, String> requestParamMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            String annotationId = requestParamMap.get("annotationId");
+            Validate.notBlank(annotationId);
+
+            final TreeSet<Annotation> annotations = annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber());
+            for (Iterator<Annotation> iterator = annotations.iterator(); iterator.hasNext(); ) {
+                Annotation annotation = iterator.next();
+                if (annotation.getAnnotationId().equals(annotationId)) {
+                    iterator.remove();
+                    return;
+                }
+            }
         } catch (Exception e) {
             log.error(e);
             throw e;
@@ -82,7 +102,7 @@ public class AnnotationForm implements Serializable {
 
     private Annotation findNextEmpty(String previousAnnotationId) {
         final TreeSet<Annotation> annotations = annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber());
-        if(annotations==null)
+        if (annotations == null)
             return null;
 
         //find current first

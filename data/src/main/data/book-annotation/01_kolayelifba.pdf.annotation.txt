@@ -1,2 +1,1 @@
 #                        Annotation Id   #Pg         X         Y         W         H  TR ARABIC                                           TR LATIN                                           |
-| 75298a9d-2136-440d-9b12-94762bd9c5c5  0000  00400.00  00207.00  00153.00  00059.00  الف                                                 tr                                                 |

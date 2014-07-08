@@ -209,6 +209,10 @@
 
     <p:remoteCommand name="selectAnnotationBridge" actionListener="#{annotationForm.selectAnnotation}"
                      update=":sideForm:annotationInputContainer" process="@this"/>
+
+    <p:remoteCommand name="deleteAnnotationBridge" actionListener="#{annotationForm.deleteGivenAnnotation}"
+                     update=":sideForm :scriptContainer" process="@this"/>
+
 </h:form>
 
 </ui:define>
@@ -278,7 +282,9 @@
             }
 
             function deleteAnnotation(annotationId) {
-                console.log(annotationId);
+                deleteAnnotationBridge([
+                    {name: 'annotationId', value: annotationId}
+                ]);
             }
 
             function onAnnotationCreateComplete(xhr, status, args) {
@@ -295,6 +301,7 @@
                     'imageSource': imageSource,
                     'onAnnotationCreate': createNewAnnotation,
                     'onAnnotationSelect': selectAnnotation,
+                    'onAnnotationDelete': deleteAnnotation,
                     'annotations': annotations
                 });
 
