@@ -24,6 +24,15 @@ function Annotator(options) {
     imageObj.src = options.imageSource;
 
 
+    // remove all event listeners as we reinitialize every time
+    $(canvas).off('mousedown');
+    $(canvas).off('mousemove');
+    $(canvas).off('mouseup');
+
+    $(document).off('mouseover');
+    $(document).off('mouseout');
+    $(document).off('click');
+
     $(canvas).mousedown(function (e) {
         var mouseX = e.pageX - this.offsetLeft;
         var mouseY = e.pageY - this.offsetTop;
@@ -64,6 +73,33 @@ function Annotator(options) {
             }
         }
         dragging = false;
+    });
+
+    $(document).on("mouseover", "div.annotationOutline", function (e) {
+        var outlineDiv = $(this);
+        outlineDiv.parent('.annotationOutlineWrapper').addClass('hover');
+    });
+
+    $(document).on("mouseout", "div.annotationOutline", function (e) {
+        var outlineDiv = $(this);
+        setTimeout(function () {
+            outlineDiv.parent('.annotationOutlineWrapper').removeClass('hover');
+        }, 1000);
+    });
+
+    $(document).on("click", "div.annotationOutline", function () {
+        if (dragging)
+            return false;
+        clearSelection();
+        var outlineDiv = $(this);
+        outlineDiv.parent('.annotationOutlineWrapper').addClass('selected');
+        options.onAnnotationSelect(outlineDiv.attr('data-annotation-id'));
+    });
+
+    $(document).on("click", "span.annotationDeleteButton", function () {
+        console.log('asdasd');
+        var deleteButton = $(this);
+        options.onAnnotationDelete(deleteButton.parent('.annotationDeleteButtonDiv').attr('data-annotation-id'));
     });
 
     self.clearCurrent = function () {
@@ -195,31 +231,6 @@ function Annotator(options) {
 //            $('#annotationDivs').find('.annotationOutline').hide();
 //        }
     }
-
-    $(document).on("mouseover", "div.annotationOutline", function (e) {
-        var outlineDiv = $(this);
-        outlineDiv.parent('.annotationOutlineWrapper').addClass('hover');
-    });
-
-    $(document).on("mouseout", "div.annotationOutline", function (e) {
-        var outlineDiv = $(this);
-        setTimeout(function(){outlineDiv.parent('.annotationOutlineWrapper').removeClass('hover');},1000);
-    });
-
-    $(document).on("click", "div.annotationOutline", function () {
-        if (dragging)
-            return false;
-        clearSelection();
-        var outlineDiv = $(this);
-        outlineDiv.parent('.annotationOutlineWrapper').addClass('selected');
-        options.onAnnotationSelect(outlineDiv.attr('data-annotation-id'));
-    });
-
-    $(document).on("click", "span.annotationDeleteButton", function () {
-        console.log('asdasd');
-        var deleteButton = $(this);
-        options.onAnnotationDelete(deleteButton.parent('.annotationDeleteButtonDiv').attr('data-annotation-id'));
-    });
 
     self.show = function () {
 
