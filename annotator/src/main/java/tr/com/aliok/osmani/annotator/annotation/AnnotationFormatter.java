@@ -12,10 +12,10 @@ import java.io.Serializable;
  */
 public class AnnotationFormatter implements Serializable {
 
-    private static final String FORMAT = "| %36s  %04d  %08.02f  %08.02f  %08.02f  %08.02f  %-50s  %-50s |";
-    private static final int FORMAT_LENGTH = 190;
+    private static final String FORMAT = "| %36s  %04d  %08.02f  %08.02f  %08.02f  %08.02f  %-50s  %-50s  %-50s  %-200s |";
+    private static final int FORMAT_LENGTH = 444;
 
-    private static final String COMMENT_FORMAT = "# %36s  %4s  %8s  %8s  %8s  %8s  %-50s  %-50s |";
+    private static final String COMMENT_FORMAT = "# %36s  %4s  %8s  %8s  %8s  %8s  %-50s  %-50s  %-50s  %-200s |";
 
     private static final Pair<Integer, Integer> ANNOTATION_ID_INDICES = Pair.of(2, 2 + 36);
     private static final Pair<Integer, Integer> PAGE_NUMBER_INDICES = Pair.of(ANNOTATION_ID_INDICES.getRight() + 2, ANNOTATION_ID_INDICES.getRight() + 2 + 4);
@@ -25,6 +25,8 @@ public class AnnotationFormatter implements Serializable {
     private static final Pair<Integer, Integer> H_INDICES = Pair.of(W_INDICES.getRight() + 2, W_INDICES.getRight() + 2 + 8);
     private static final Pair<Integer, Integer> TR_ARABIC_INDICES = Pair.of(H_INDICES.getRight() + 2, H_INDICES.getRight() + 2 + 50);
     private static final Pair<Integer, Integer> TR_LATIN_INDICES = Pair.of(TR_ARABIC_INDICES.getRight() + 2, TR_ARABIC_INDICES.getRight() + 2 + 50);
+    private static final Pair<Integer, Integer> TR_LATIN2_INDICES = Pair.of(TR_LATIN_INDICES.getRight() + 2, TR_LATIN_INDICES.getRight() + 2 + 50);
+    private static final Pair<Integer, Integer> DESCRIPTION_INDICES = Pair.of(TR_LATIN2_INDICES.getRight() + 2, TR_LATIN2_INDICES.getRight() + 2 + 200);
 
     public String getFormatCommentLine() {
         return String.format(COMMENT_FORMAT,
@@ -35,7 +37,9 @@ public class AnnotationFormatter implements Serializable {
                 "W",
                 "H",
                 "TR ARABIC",
-                "TR LATIN"
+                "TR LATIN",
+                "TR LATIN 2",
+                "DESCRIPTION"
         );
     }
 
@@ -48,7 +52,9 @@ public class AnnotationFormatter implements Serializable {
                 annotation.getW(),
                 annotation.getH(),
                 annotation.getTr_arabic(),
-                annotation.getTr_latin()
+                annotation.getTr_latin(),
+                annotation.getTr_latin2(),
+                annotation.getDescription()
         );
     }
 
@@ -63,18 +69,22 @@ public class AnnotationFormatter implements Serializable {
         final double h = getDoubleFromLine(line, H_INDICES);
         final String tr_arabic = getStringFroLine(line, TR_ARABIC_INDICES);
         final String tr_latin = getStringFroLine(line, TR_LATIN_INDICES);
+        final String tr_latin2 = getStringFroLine(line, TR_LATIN2_INDICES);
+        final String description = getStringFroLine(line, DESCRIPTION_INDICES);
 
 
         final Annotation annotation = new AnnotationBuilder()
-                .setFileId(fileId)
-                .setAnnotationId(annotationId)
-                .setPageNumber(pageNumber)
-                .setX(x)
-                .setY(y)
-                .setW(w)
-                .setH(h)
-                .setTr_arabic(tr_arabic)
-                .setTr_latin(tr_latin)
+                .fileId(fileId)
+                .annotationId(annotationId)
+                .pageNumber(pageNumber)
+                .x(x)
+                .y(y)
+                .w(w)
+                .h(h)
+                .tr_arabic(tr_arabic)
+                .tr_latin(tr_latin)
+                .tr_latin2(tr_latin2)
+                .description(description)
                 .createAnnotation();
 
         return annotation;

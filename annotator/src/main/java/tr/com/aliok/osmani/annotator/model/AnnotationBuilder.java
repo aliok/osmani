@@ -9,54 +9,66 @@ public class AnnotationBuilder {
     private double h;
     private String tr_latin;
     private String tr_arabic;
+    private String tr_latin2;
+    private String description;
     private String annotationId;
 
-    public AnnotationBuilder setFileId(String fileId) {
+    public AnnotationBuilder fileId(String fileId) {
         this.fileId = fileId;
         return this;
     }
 
-    public AnnotationBuilder setPageNumber(int pageNumber) {
+    public AnnotationBuilder pageNumber(int pageNumber) {
         this.pageNumber = pageNumber;
         return this;
     }
 
-    public AnnotationBuilder setX(double x) {
+    public AnnotationBuilder x(double x) {
         this.x = x;
         return this;
     }
 
-    public AnnotationBuilder setY(double y) {
+    public AnnotationBuilder y(double y) {
         this.y = y;
         return this;
     }
 
-    public AnnotationBuilder setW(double w) {
+    public AnnotationBuilder w(double w) {
         this.w = w;
         return this;
     }
 
-    public AnnotationBuilder setH(double h) {
+    public AnnotationBuilder h(double h) {
         this.h = h;
         return this;
     }
 
-    public AnnotationBuilder setTr_latin(String tr_latin) {
+    public AnnotationBuilder tr_latin(String tr_latin) {
         this.tr_latin = tr_latin;
         return this;
     }
 
-    public AnnotationBuilder setTr_arabic(String tr_arabic) {
+    public AnnotationBuilder tr_arabic(String tr_arabic) {
         this.tr_arabic = tr_arabic;
         return this;
     }
 
-    public AnnotationBuilder setAnnotationId(String annotationId) {
+    public AnnotationBuilder tr_latin2(String tr_latin2) {
+        this.tr_latin2 = tr_latin2;
+        return this;
+    }
+
+    public AnnotationBuilder description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public AnnotationBuilder annotationId(String annotationId) {
         this.annotationId = annotationId;
         return this;
     }
 
     public Annotation createAnnotation() {
-        return new Annotation(fileId, pageNumber, x, y, w, h, tr_latin, tr_arabic, annotationId);
+        return new Annotation(fileId, pageNumber, x, y, w, h, tr_latin, tr_arabic, tr_latin2, description, annotationId);
     }
 }

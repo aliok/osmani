@@ -15,7 +15,10 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * @author Ali Ok (ali.ok@apache.org)
@@ -53,17 +56,19 @@ public class AnnotationDataController implements Serializable {
     }
 
 
-    public Annotation addNew(String fileId, int pageNumber, int x, int y, int w, int h, String tr_latin, String tr_arabic, String annotationId) {
+    public Annotation addNew(String fileId, int pageNumber, int x, int y, int w, int h, String tr_latin, String tr_arabic, String tr_latin2, String description, String annotationId) {
         final Annotation annotation = new AnnotationBuilder()
-                .setFileId(fileId)
-                .setPageNumber(pageNumber)
-                .setX(x)
-                .setY(y)
-                .setW(w)
-                .setH(h)
-                .setTr_latin(tr_latin)
-                .setTr_arabic(tr_arabic)
-                .setAnnotationId(annotationId)
+                .fileId(fileId)
+                .pageNumber(pageNumber)
+                .x(x)
+                .y(y)
+                .w(w)
+                .h(h)
+                .tr_latin(tr_latin)
+                .tr_arabic(tr_arabic)
+                .tr_latin2(tr_latin2)
+                .description(description)
+                .annotationId(annotationId)
                 .createAnnotation();
 
         final TreeSet<Annotation> annotations = annotationTable.get(annotation.getFileId(), annotation.getPageNumber());

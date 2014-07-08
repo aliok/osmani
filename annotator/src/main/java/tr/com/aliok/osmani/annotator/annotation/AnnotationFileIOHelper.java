@@ -126,33 +126,37 @@ public class AnnotationFileIOHelper implements Serializable {
         }));
 
         for (String annotationFile : annotationFiles) {
-            final String fileName = FilenameUtils.getName(annotationFile);
-            Validate.isTrue(fileName.endsWith("annotation.txt"));
-
-            final String fileId = fileName.substring(0, fileName.length() - ".annotation.txt".length());
-
-
-            // read at once
-            final List<String> lines = FileUtils.readLines(new File(FilenameUtils.concat(annotationFolder, annotationFile)), Charsets.UTF_8);
-            for (String line : lines) {
-                if (line.startsWith("#")) {
-                    continue;
-                }
-
-                final Annotation annotation = this.annotationFormatter.parseLine(fileId, line);
-
-                final TreeSet<Annotation> annotations = table.get(fileId, annotation.getPageNumber());
-                if (annotations == null) {
-                    final TreeSet<Annotation> newSet = new TreeSet<>();
-                    newSet.add(annotation);
-                    table.put(fileId, annotation.getPageNumber(), newSet);
-                } else {
-                    annotations.add(annotation);
-                }
-            }
+            readFile(table, annotationFolder, annotationFile);
         }
 
 
         return table;
+    }
+
+    public void readFile(TreeBasedTable<String, Integer, TreeSet<Annotation>> table, String annotationFolder, String annotationFile) throws IOException {
+        final String fileName = FilenameUtils.getName(annotationFile);
+        Validate.isTrue(fileName.endsWith("annotation.txt"));
+
+        final String fileId = fileName.substring(0, fileName.length() - ".annotation.txt".length());
+
+
+        // read at once
+        final List<String> lines = FileUtils.readLines(new File(FilenameUtils.concat(annotationFolder, annotationFile)), Charsets.UTF_8);
+        for (String line : lines) {
+            if (line.startsWith("#")) {
+                continue;
+            }
+
+            final Annotation annotation = this.annotationFormatter.parseLine(fileId, line);
+
+            final TreeSet<Annotation> annotations = table.get(fileId, annotation.getPageNumber());
+            if (annotations == null) {
+                final TreeSet<Annotation> newSet = new TreeSet<>();
+                newSet.add(annotation);
+                table.put(fileId, annotation.getPageNumber(), newSet);
+            } else {
+                annotations.add(annotation);
+            }
+        }
     }
 }

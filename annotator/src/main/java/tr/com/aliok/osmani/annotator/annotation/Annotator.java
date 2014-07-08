@@ -8,7 +8,6 @@ import org.apache.commons.logging.LogFactory;
 import org.primefaces.context.RequestContext;
 import tr.com.aliok.osmani.annotator.model.Annotation;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -117,6 +116,8 @@ public class Annotator implements Serializable {
         int h = getRequiredIntegerRequestParam(requestParamMap, "h");
         final String tr_latin = getStringRequestParam(requestParamMap, "tr_latin");
         final String tr_arabic = getStringRequestParam(requestParamMap, "tr_arabic");
+        final String tr_latin2 = getStringRequestParam(requestParamMap, "tr_latin2");
+        final String description = getStringRequestParam(requestParamMap, "description");
 
         // tr_latin is optional
         Validate.notNull(tr_arabic);
@@ -139,7 +140,7 @@ public class Annotator implements Serializable {
 
         final String annotationId = UUID.randomUUID().toString();
         RequestContext.getCurrentInstance().addCallbackParam("annotationId", annotationId);
-        final Annotation annotation = annotationDataController.addNew(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber(), x, y, w, h, tr_latin, tr_arabic, annotationId);
+        final Annotation annotation = annotationDataController.addNew(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber(), x, y, w, h, tr_latin, tr_arabic, tr_latin2, description, annotationId);
         System.out.printf("Created : " + annotation.toString() + "\n");
     }
 

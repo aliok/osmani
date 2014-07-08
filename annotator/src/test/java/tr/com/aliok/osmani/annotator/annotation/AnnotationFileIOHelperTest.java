@@ -25,15 +25,17 @@ public class AnnotationFileIOHelperTest {
     @Test
     public void shouldWriteToFile() throws IOException {
         final Annotation annotation = new AnnotationBuilder()
-                .setAnnotationId("12345678-1234-1234-1234-1234567890ab")
-                .setPageNumber(10)
-                .setX(10)
-                .setY(200)
-                .setW(250)
-                .setH(300)
-                .setTr_arabic("test_arabic")
-                .setTr_latin("test_latin")
-                .setFileId("test.pdf")
+                .annotationId("12345678-1234-1234-1234-1234567890ab")
+                .pageNumber(10)
+                .x(10)
+                .y(200)
+                .w(250)
+                .h(300)
+                .tr_arabic("test_arabic")
+                .tr_latin("test_latin")
+                .tr_latin2("test_latin2")
+                .description("description")
+                .fileId("test.pdf")
                 .createAnnotation();
 
 
@@ -53,18 +55,23 @@ public class AnnotationFileIOHelperTest {
 
     @Test
     public void shouldRead() throws IOException {
-        final TreeBasedTable<String, Integer, TreeSet<Annotation>> table = helper.readAllFiles();
+        final TreeBasedTable<String, Integer, TreeSet<Annotation>> table = TreeBasedTable.create();
+        final String annotationFolder = AppProperties.bookAnnotationFolder();
+
+        helper.readFile(table, annotationFolder, "test.pdf.annotation.txt");
 
         final Annotation annotation = new AnnotationBuilder()
-                .setAnnotationId("12345678-1234-1234-1234-1234567890ab")
-                .setPageNumber(10)
-                .setX(10)
-                .setY(200)
-                .setW(250)
-                .setH(300)
-                .setTr_arabic("test_arabic")
-                .setTr_latin("test_latin")
-                .setFileId("test.pdf")
+                .annotationId("12345678-1234-1234-1234-1234567890ab")
+                .pageNumber(10)
+                .x(10)
+                .y(200)
+                .w(250)
+                .h(300)
+                .tr_arabic("test_arabic")
+                .tr_latin("test_latin")
+                .tr_latin2("test_latin2")
+                .description("description")
+                .fileId("test.pdf")
                 .createAnnotation();
 
         final TreeSet<Annotation> allForTestFile = table.get("test.pdf", 10);
@@ -82,7 +89,16 @@ public class AnnotationFileIOHelperTest {
         assertThat(annotation.getH(), equalTo(retrieved.getH()));
         assertThat(annotation.getTr_arabic(), equalTo(retrieved.getTr_arabic()));
         assertThat(annotation.getTr_latin(), equalTo(retrieved.getTr_latin()));
+        assertThat(annotation.getTr_latin2(), equalTo(retrieved.getTr_latin2()));
+        assertThat(annotation.getDescription(), equalTo(retrieved.getDescription()));
+    }
 
+    /**
+     * Makes sure annotation files are conforming the format
+     */
+    @Test
+    public void shouldReadAllFiles() throws IOException {
+        helper.readAllFiles();
     }
 
 }

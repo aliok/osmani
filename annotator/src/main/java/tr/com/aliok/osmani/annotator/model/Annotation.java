@@ -18,9 +18,11 @@ public class Annotation implements Serializable, Comparable {
     private double h;
     private String tr_latin;
     private String tr_arabic;
+    private String tr_latin2;
+    private String description;
     private String annotationId;
 
-    Annotation(String fileId, int pageNumber, double x, double y, double w, double h, String tr_latin, String tr_arabic, String annotationId) {
+    Annotation(String fileId, int pageNumber, double x, double y, double w, double h, String tr_latin, String tr_arabic, String tr_latin2, String description, String annotationId) {
         this.fileId = fileId;
         this.pageNumber = pageNumber;
         this.x = x;
@@ -29,6 +31,8 @@ public class Annotation implements Serializable, Comparable {
         this.h = h;
         this.tr_latin = tr_latin;
         this.tr_arabic = tr_arabic;
+        this.tr_latin2 = tr_latin2;
+        this.description = description;
         this.annotationId = annotationId;
     }
 
@@ -62,6 +66,14 @@ public class Annotation implements Serializable, Comparable {
 
     public String getTr_arabic() {
         return tr_arabic;
+    }
+
+    public String getTr_latin2() {
+        return tr_latin2;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public String getAnnotationId() {
@@ -100,6 +112,14 @@ public class Annotation implements Serializable, Comparable {
         this.tr_arabic = tr_arabic;
     }
 
+    public void setTr_latin2(String tr_latin2) {
+        this.tr_latin2 = tr_latin2;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public void setAnnotationId(String annotationId) {
         this.annotationId = annotationId;
     }
@@ -115,6 +135,8 @@ public class Annotation implements Serializable, Comparable {
                 ", h=" + h +
                 ", tr_latin='" + tr_latin + '\'' +
                 ", tr_arabic='" + tr_arabic + '\'' +
+                ", tr_latin2='" + tr_latin2 + '\'' +
+                ", description='" + description + '\'' +
                 ", annotationId='" + annotationId + '\'' +
                 '}';
     }
