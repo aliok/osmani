@@ -75,6 +75,36 @@ function Annotator(options) {
         dragging = false;
     });
 
+    $(document).on('mousemove', function (e) {
+        $('.annotationOutlineWrapper').css('visibility', 'hidden');
+
+        var $under = $(document.elementFromPoint(e.clientX, e.clientY));
+
+        $('.annotationOutlineWrapper').css('visibility', 'visible');
+
+        if (dragging && $under.attr('id') == $(canvas).attr('id')) {
+            var mouseX = e.pageX - canvas.offsetLeft;
+            var mouseY = e.pageY - canvas.offsetTop;
+
+            width = mouseX - originX;
+            height = mouseY - originY;
+
+            redraw();
+        }
+    });
+
+    $(document).on('mouseup', function (e) {
+        $('.annotationOutlineWrapper').css('visibility', 'hidden');
+
+        var $under = $(document.elementFromPoint(e.clientX, e.clientY));
+
+        $('.annotationOutlineWrapper').css('visibility', 'visible');
+
+        if ($under.attr('id') == $(canvas).attr('id')) {
+            $(canvas).mouseup();
+        }
+    });
+
     $(document).on("mouseover", "div.annotationOutline", function (e) {
         var outlineDiv = $(this);
         outlineDiv.parent('.annotationOutlineWrapper').addClass('hover');
