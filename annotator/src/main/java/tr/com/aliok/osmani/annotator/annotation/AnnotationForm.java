@@ -7,7 +7,6 @@ import org.apache.commons.logging.LogFactory;
 import org.primefaces.context.RequestContext;
 import tr.com.aliok.osmani.annotator.model.Annotation;
 
-import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;

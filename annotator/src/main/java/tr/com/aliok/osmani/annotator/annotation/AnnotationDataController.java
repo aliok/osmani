@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.google.common.collect.TreeBasedTable;
 import org.apache.commons.collections.list.SetUniqueList;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -63,6 +64,11 @@ public class AnnotationDataController implements Serializable {
 
 
     public Annotation addNew(String fileId, int pageNumber, int x, int y, int w, int h, String tr_latin, String tr_arabic, String tr_latin2, String description, String annotationId) {
+        if (StringUtils.isBlank(tr_latin) && StringUtils.isNotBlank(tr_latin2)) {
+            tr_latin = tr_latin2;
+            tr_latin2 = StringUtils.EMPTY;
+        }
+
         final Annotation annotation = new AnnotationBuilder()
                 .fileId(fileId)
                 .pageNumber(pageNumber)
