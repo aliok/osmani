@@ -41,7 +41,13 @@ public class AnnotationDataController implements Serializable {
     private int flushCounter = 0;
 
     private final FilePageHelper filePageHelper = new FilePageHelper();
-    private final AnnotationFileIOHelper annotationFileIOHelper = new AnnotationFileIOHelper();
+    private final AnnotationFileIOHelper annotationFileIOHelper;
+
+    public AnnotationDataController() {
+        final AnnotationFormatter annotationFormatter = new AnnotationFormatterImpl();
+        annotationFileIOHelper = new AnnotationFileIOHelper();
+        annotationFileIOHelper.setAnnotationFormatter(annotationFormatter);
+    }
 
     @PostConstruct
     public void initialize() {

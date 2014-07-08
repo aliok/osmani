@@ -9,7 +9,7 @@ import java.util.UUID;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class AnnotationFormatterTest {
+public class AnnotationFormatterImplTest {
 
     @Test
     public void shouldFormatAndThenParse() {
@@ -27,7 +27,7 @@ public class AnnotationFormatterTest {
                 .fileId("testFile.pdf")
                 .createAnnotation();
 
-        final AnnotationFormatter formatter = new AnnotationFormatter();
+        final AnnotationFormatter formatter = new AnnotationFormatterImpl();
         final String formatted = formatter.formatAnnotation(annotation);
         final Annotation parsed = formatter.parseLine("testFile.pdf", formatted);
 

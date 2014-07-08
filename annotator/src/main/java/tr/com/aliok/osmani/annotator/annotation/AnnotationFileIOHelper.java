@@ -29,7 +29,7 @@ public class AnnotationFileIOHelper implements Serializable {
 
     private static final int BACKUP_CLEANUP_LIMIT = 5;
 
-    private final AnnotationFormatter annotationFormatter = new AnnotationFormatter();
+    private AnnotationFormatter annotationFormatter;
 
     public void writeTableToFile(String fileId, Table<String, Integer, TreeSet<Annotation>> annotationTable) throws IOException {
         final File annotationFile = getAnnotationFile(fileId);
@@ -158,5 +158,9 @@ public class AnnotationFileIOHelper implements Serializable {
                 annotations.add(annotation);
             }
         }
+    }
+
+    public void setAnnotationFormatter(AnnotationFormatter annotationFormatter) {
+        this.annotationFormatter = annotationFormatter;
     }
 }

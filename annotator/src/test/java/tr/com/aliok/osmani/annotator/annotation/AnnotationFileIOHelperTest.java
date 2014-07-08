@@ -4,6 +4,7 @@ import com.google.common.collect.Table;
 import com.google.common.collect.TreeBasedTable;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.junit.Before;
 import org.junit.Test;
 import tr.com.aliok.osmani.annotator.commons.AppProperties;
 import tr.com.aliok.osmani.annotator.model.Annotation;
@@ -20,7 +21,13 @@ import static org.junit.Assert.assertThat;
 
 public class AnnotationFileIOHelperTest {
 
-    final AnnotationFileIOHelper helper = new AnnotationFileIOHelper();
+    AnnotationFileIOHelper helper;
+
+    @Before
+    public void before() {
+        helper = new AnnotationFileIOHelper();
+        helper.setAnnotationFormatter(new AnnotationFormatterImpl());
+    }
 
     @Test
     public void shouldWriteToFile() throws IOException {
