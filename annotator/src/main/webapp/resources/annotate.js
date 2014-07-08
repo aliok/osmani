@@ -9,6 +9,8 @@ function Annotator(options) {
     var height = -1;
     var tr_latin = null;
     var tr_arabic = null;
+    var tr_latin2 = null;
+    var description = null;
     var dragging = false;
 
     console.log('Init');
@@ -69,7 +71,9 @@ function Annotator(options) {
             if (originX >= 0 && originY >= 0 && width != 0 && height != 0) {
                 var textData = {
                     'tr_latin': tr_latin,
-                    'tr_arabic': tr_arabic
+                    'tr_arabic': tr_arabic,
+                    'tr_latin2': tr_latin2,
+                    'description': description
                 };
                 options.onAnnotationCreate(originX, originY, width, height, textData);
             }
@@ -163,7 +167,9 @@ function Annotator(options) {
                 'h': height,
                 'textData': {
                     'tr_latin': tr_latin,
-                    'tr_arabic': tr_arabic
+                    'tr_arabic': tr_arabic,
+                    'tr_latin2': tr_latin2,
+                    'description': description
                 }
             }
         );
@@ -224,12 +230,18 @@ function Annotator(options) {
                     "<div class='text'>" +
                     "<span>TR Arabic : </span><span class='tr_arabic'></span>" +
                     "<br/>" +
-                    "<span>TR Latin : </span><span class='tr_latin'></span>" +
+                    "<span>TR Latin  : </span><span class='tr_latin'></span>" +
+                    "<br/>" +
+                    "<span>TR Latin 2: </span><span class='tr_latin2'></span>" +
+                    "<br/>" +
+                    "<span>Descript. : </span><span class='description'></span>" +
                     "</div>" +
                     "</div>");
             annotationOverlayDiv.attr("data-annotation-id", annotation.id);
             annotationOverlayDiv.find('.tr_arabic').html(annotation.textData.tr_arabic);
             annotationOverlayDiv.find('.tr_latin').html(annotation.textData.tr_latin);
+            annotationOverlayDiv.find('.tr_latin2').html(annotation.textData.tr_latin2);
+            annotationOverlayDiv.find('.description').html(annotation.textData.description);
 
             annotationOverlayDiv.css("left", annotation.x);
             annotationOverlayDiv.css("top", annotation.y + annotation.h + 5);

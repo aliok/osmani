@@ -163,6 +163,12 @@
                     <h:outputText value="TR_LATIN"/>
                     <h:inputText id="tr_latin" value="#{annotatorData.current.tr_latin}"/>
 
+                    <h:outputText value="TR_LATIN2"/>
+                    <h:inputText id="tr_latin2" value="#{annotatorData.current.tr_latin2}"/>
+
+                    <h:outputText value="DESCRIPTION"/>
+                    <h:inputText value="#{annotatorData.current.description}"/>
+
                     <h:outputText value="x"/>
                     <h:inputText value="#{annotatorData.current.x}"/>
 
@@ -233,6 +239,8 @@
             //                        'h': 200,
             //                        'textData': {
             //                            'tr_latin': 'Kolay',
+            //                            'tr_latin2': 'Kulay',
+            //                            'description': 'Aciklama',
             //                            'tr_arabic': ' الف'
             //                        },
             //                          'selected' : true
@@ -245,6 +253,8 @@
             //                        'h': 400,
             //                        'textData': {
             //                            'tr_latin': 'Kolay2',
+            //                            'tr_latin2': 'Kulay2',
+            //                            'description': 'Aciklama2',
             //                            'tr_arabic': '2 الف'
             //                        }
             //                    }
@@ -258,6 +268,8 @@
                 // sample text data:
                 //{
                 //    'tr_latin' : 'Kolay',
+                //    'tr_latin2' : 'Kulay',
+                //    'description' : 'Aciklama',
                 //    'tr_arabic' : ' الف'
                 //}
                 createNewAnnotationBridge([
@@ -266,7 +278,9 @@
                     {name: 'w', value: w},
                     {name: 'h', value: h},
                     {name: 'tr_latin', value: textData.tr_latin},
-                    {name: 'tr_arabic', value: textData.tr_arabic}
+                    {name: 'tr_arabic', value: textData.tr_arabic},
+                    {name: 'tr_latin2', value: textData.tr_latin2},
+                    {name: 'description', value: textData.description}
                 ]);
             }
 
