@@ -28,6 +28,8 @@ public class AnnotationJSONFormatter implements Serializable {
                 'textData': {
                     'tr_latin': 'Kolay',
                     'tr_arabic': ' الف'
+                    'tr_latin2': 'Kulay',
+                    'description': 'Aciklama',
                 },
                 'selected' : true
             },
@@ -39,7 +41,9 @@ public class AnnotationJSONFormatter implements Serializable {
                 'h': 400,
                 'textData': {
                     'tr_latin': 'Kolay2',
-                    'tr_arabic': '2 الف'
+                    'tr_arabic': '2 الف',
+                    'tr_latin2': 'Kulay2',
+                    'description': 'Aciklama2',
                 }
             }
         ]
@@ -53,6 +57,8 @@ public class AnnotationJSONFormatter implements Serializable {
             final JsonObject textData = new JsonObject();
             textData.add("tr_arabic", new JsonPrimitive(Strings.nullToEmpty(annotation.getTr_arabic())));
             textData.add("tr_latin", new JsonPrimitive(Strings.nullToEmpty(annotation.getTr_latin())));
+            textData.add("tr_latin2", new JsonPrimitive(Strings.nullToEmpty(annotation.getTr_latin2())));
+            textData.add("description", new JsonPrimitive(Strings.nullToEmpty(annotation.getDescription())));
 
             final JsonObject jsonObject = new JsonObject();
             jsonObject.add("id", new JsonPrimitive(annotation.getAnnotationId()));
@@ -61,7 +67,7 @@ public class AnnotationJSONFormatter implements Serializable {
             jsonObject.add("w", new JsonPrimitive(annotation.getW()));
             jsonObject.add("h", new JsonPrimitive(annotation.getH()));
             jsonObject.add("textData", textData);
-            if(current!=null)
+            if (current != null)
                 jsonObject.add("selected", new JsonPrimitive(annotation.getAnnotationId().equals(current.getAnnotationId())));
 
             jsonArray.add(jsonObject);

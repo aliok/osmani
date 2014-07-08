@@ -152,7 +152,7 @@
                     });
                 </script>
 
-                <p:panelGrid columns="1" rendered="#{not empty annotatorData.current}">
+                <p:panelGrid columns="2" rendered="#{not empty annotatorData.current}">
                     <h:outputText value="Id"/>
                     <h:outputText value="#{annotatorData.current.annotationId}"/>
 
@@ -167,7 +167,7 @@
                     <h:inputText id="tr_latin2" value="#{annotatorData.current.tr_latin2}"/>
 
                     <h:outputText value="DESCRIPTION"/>
-                    <h:inputText value="#{annotatorData.current.description}"/>
+                    <h:inputTextarea value="#{annotatorData.current.description}"/>
 
                     <h:outputText value="x"/>
                     <h:inputText value="#{annotatorData.current.x}"/>
@@ -181,17 +181,18 @@
                     <h:outputText value="h"/>
                     <h:inputText value="#{annotatorData.current.h}"/>
 
-                    <p:outputPanel>
+                    <p:panelGrid columns="2">
                         <p:commandButton id="deleteButton" value="Delete" action="#{annotationForm.delete}"
                                          process="@this"
                                          update="@form :scriptContainer"/>
                         <p:commandButton id="saveButton" value="Save" action="#{annotationForm.save}"
                                          process="annotationInputContainer"
                                          update="@form :scriptContainer"/>
-                        <p:commandButton id="saveAndNextButton" value="Save and Next"
-                                         action="#{annotationForm.saveAndNext}" process="annotationInputContainer"
-                                         update="@form :scriptContainer"/>
-                    </p:outputPanel>
+                    </p:panelGrid>
+                    <p:commandButton id="saveAndNextButton" value="Save and Next"
+                                     action="#{annotationForm.saveAndNext}"
+                                     process="annotationInputContainer"
+                                     update="@form :scriptContainer"/>
                 </p:panelGrid>
 
                 <p:defaultCommand target="saveButton"

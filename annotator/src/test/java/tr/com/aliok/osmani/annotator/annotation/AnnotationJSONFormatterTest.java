@@ -45,7 +45,7 @@ public class AnnotationJSONFormatterTest {
                 .fileId("test.pdf")
                 .createAnnotation();
 
-        final String expected = "[{\"id\":\"12345678-1234-1234-1234-1234567890ab\",\"x\":10.0,\"y\":200.0,\"w\":250.0,\"h\":300.0,\"textData\":{\"tr_arabic\":\"test_arabic\",\"tr_latin\":\"test_latin\"},\"selected\":true},{\"id\":\"12345678-1234-1234-1234-1234567890ac\",\"x\":10.0,\"y\":200.0,\"w\":250.0,\"h\":300.0,\"textData\":{\"tr_arabic\":\"test_arabic\",\"tr_latin\":\"test_latin\"},\"selected\":false}]";
+        final String expected = "[{\"id\":\"12345678-1234-1234-1234-1234567890ab\",\"x\":10.0,\"y\":200.0,\"w\":250.0,\"h\":300.0,\"textData\":{\"tr_arabic\":\"test_arabic\",\"tr_latin\":\"test_latin\",\"tr_latin2\":\"test_latin2\",\"description\":\"description\"},\"selected\":true},{\"id\":\"12345678-1234-1234-1234-1234567890ac\",\"x\":10.0,\"y\":200.0,\"w\":250.0,\"h\":300.0,\"textData\":{\"tr_arabic\":\"test_arabic\",\"tr_latin\":\"test_latin\",\"tr_latin2\":\"test_latin2\",\"description\":\"description\"},\"selected\":false}]";
 
         final String json = formatter.getJSON(new TreeSet<>(Arrays.asList(annotation1, annotation2)), annotation1);
         assertThat(json, equalTo(expected));
