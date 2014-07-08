@@ -73,6 +73,10 @@
     border: 1px solid red;
 }
 
+.annotationOverlay .tr_arabic{
+    font-size: xx-large;
+}
+
 .text,
 .text span {
     white-space: nowrap;
