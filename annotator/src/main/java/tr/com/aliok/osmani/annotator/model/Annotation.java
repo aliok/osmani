@@ -166,11 +166,17 @@ public class Annotation implements Serializable, Comparable {
         return new CompareToBuilder()
                 .append(this.fileId, other.fileId)
                 .append(this.pageNumber, other.pageNumber)
-                .append(this.x, other.x)
-                .append(this.y, other.y)
-                .append(this.w, other.w)
-                .append(this.h, other.h)
+                .append(getCenterOfGravityY(), other.getCenterOfGravityY())
+                .append(getCenterOfGravityX(), other.getCenterOfGravityX())
                 .append(this.annotationId, other.annotationId)
                 .toComparison();
+    }
+
+    public double getCenterOfGravityX() {
+        return this.x + w / 2;
+    }
+
+    public double getCenterOfGravityY() {
+        return this.h + h / 2;
     }
 }
