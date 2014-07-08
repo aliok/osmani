@@ -33,7 +33,8 @@ public class AnnotationForm implements Serializable {
 
     public String initialize() {
         final TreeSet<Annotation> annotations = annotationDataController.getAnnotations(annotatorData.getCurrentFileId(), annotatorData.getCurrentPageNumber());
-        this.annotatorData.setCurrent(annotations.iterator().next());
+        if(annotations!=null && !annotations.isEmpty())
+            this.annotatorData.setCurrent(annotations.iterator().next());
         return "";
     }
 

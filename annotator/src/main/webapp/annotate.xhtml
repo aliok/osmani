@@ -12,178 +12,204 @@
 
 <ui:define name="content">
 
-    #{annotator.initialize()}
-    #{annotationForm.initialize()}
+#{annotator.initialize()}
+#{annotationForm.initialize()}
 
-    <p:ajaxStatus>
-        <f:facet name="default">
-            <h:outputText value="Idle" style="visibility: hidden; height: 20px;"/>
-        </f:facet>
+<p:ajaxStatus>
+    <f:facet name="default">
+        <h:outputText value="Idle" style="visibility: hidden; height: 20px;"/>
+    </f:facet>
 
-        <f:facet name="start">
-            <h:outputText value="Loading..." style="height: 20px;"/>
-        </f:facet>
+    <f:facet name="start">
+        <h:outputText value="Loading..." style="height: 20px;"/>
+    </f:facet>
 
-        <f:facet name="complete">
-            <h:outputText value="Idle" style="visibility: hidden; height: 20px;"/>
-        </f:facet>
+    <f:facet name="complete">
+        <h:outputText value="Idle" style="visibility: hidden; height: 20px;"/>
+    </f:facet>
 
-        <f:facet name="error">
-            <h:outputText value="Error occurred!" style="color: red; height: 20px;"/>
-        </f:facet>
+    <f:facet name="error">
+        <h:outputText value="Error occurred!" style="color: red; height: 20px;"/>
+    </f:facet>
 
-    </p:ajaxStatus>
+</p:ajaxStatus>
 
-    <h:form id="sideForm" prependId="false">
-        <div class="row">
-            <!--static position is required in the following, else position information on canvas is calculated wrong-->
-            <div class="col-md-9" style="position: static;">
-                <div id="annotationDivs"></div>
-                <canvas id="annotationCanvas"></canvas>
-            </div>
-            <div class="col-md-3">
-                <p:panelGrid style="width: 100%;">
-
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="currentFile" value="Current File"/>
-                        </p:column>
-                        <p:column>
-                            <h:selectOneMenu id="currentFile" value="#{annotatorData.currentFileId}">
-                                <f:selectItems value="#{annotator.allFileIds}" var="fileId" itemLabel="#{fileId}"
-                                               itemValue="#{fileId}"/>
-                                <p:ajax process="@this" update="@form :scriptContainer"
-                                        listener="#{annotator.onFileSelect}"/>
-                            </h:selectOneMenu>
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column>
-                            <p:outputLabel for="currentPage" value="Current Page"/>
-                        </p:column>
-                        <p:column>
-                            <h:inputText id="currentPage" value="#{annotatorData.currentPageNumber}"
-                                         style="width: 50px;">
-                                <p:ajax process="@this" update="@form :scriptContainer"
-                                        listener="#{annotator.onPageSelect}"/>
-                            </h:inputText>
-
-                            <h:outputFormat value="of {0}" style="white-space: nowrap;">
-                                <f:param value="#{annotator.numberOfPagesForCurrentFile()}"/>
-                            </h:outputFormat>
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column colspan="2">
-                            <p:commandLink value="← Previous page" action="#{annotator.previousPage}"
-                                           disabled="#{not annotator.previousPageAvailable}"
-                                           process="@this" update="@form :scriptContainer"
-                                           style="float: left;"/>
-
-                            <p:commandLink value="Next page →" action="#{annotator.nextPage}"
-                                           disabled="#{not annotator.nextPageAvailable}"
-                                           process="@this" update="@form :scriptContainer"
-                                           style="float: right;"/>
-                        </p:column>
-                    </p:row>
-
-                    <p:row>
-                        <p:column colspan="2">
-                            <p:commandLink value="Force flush" action="#{annotator.forceFlush}"
-                                           process="@this" update="@this"/>
-                        </p:column>
-                    </p:row>
-
-                </p:panelGrid>
-
-                <br/>
-                <br/>
-
-                <p:panelGrid columns="2">
-                    <h:outputLabel for="batchModeCheckBox" value="Batch mode"/>
-                    <h:selectBooleanCheckbox id="batchModeCheckBox" value="#{annotatorData.batchMode}">
-                        <p:ajax process="@this" update="@form :scriptContainer"/>
-                    </h:selectBooleanCheckbox>
-
-                    <h:outputLabel id="ignoreEmptyLatinCheckBoxLabel" for="ignoreEmptyLatinCheckBox"
-                                   value="Ignore empty latin"/>
-                    <h:selectBooleanCheckbox id="ignoreEmptyLatinCheckBox" disabled="#{not annotatorData.batchMode}"
-                                             value="#{annotatorData.ignoreEmptyLatin}">
-                        <p:ajax process="@this" update="@form :scriptContainer"/>
-                    </h:selectBooleanCheckbox>
-                </p:panelGrid>
-
-
-                <br/>
-                <br/>
-
-                <h:panelGroup id="annotationInputContainer">
-                    <p:growl showSummary="true"/>
-
-                    <p:focus for="tr_arabic"
-                             rendered="#{empty annotatorData.current.tr_arabic or not empty annotatorData.current.tr_latin}"/>
-                    <p:focus for="tr_latin"
-                             rendered="#{not empty annotatorData.current.tr_arabic and empty annotatorData.current.tr_latin}"/>
-
-                    <p:panelGrid columns="1" rendered="#{not empty annotatorData.current}">
-                        <h:outputText value="Id"/>
-                        <h:outputText value="#{annotatorData.current.annotationId}"/>
-
-                        <h:outputText value="TR_ARABIC"/>
-                        <h:inputText id="tr_arabic" value="#{annotatorData.current.tr_arabic}"
-                                     dir="RTL"/>
-
-                        <h:outputText value="TR_LATIN"/>
-                        <h:inputText id="tr_latin" value="#{annotatorData.current.tr_latin}"/>
-
-                        <h:outputText value="x"/>
-                        <h:inputText value="#{annotatorData.current.x}"/>
-
-                        <h:outputText value="y"/>
-                        <h:inputText value="#{annotatorData.current.y}"/>
-
-                        <h:outputText value="w"/>
-                        <h:inputText value="#{annotatorData.current.w}"/>
-
-                        <h:outputText value="h"/>
-                        <h:inputText value="#{annotatorData.current.h}"/>
-
-                        <p:outputPanel>
-                            <p:commandButton value="Delete" action="#{annotationForm.delete}" process="@this"
-                                             update="@form :scriptContainer"/>
-                            <p:commandButton id="saveButton" value="Save" action="#{annotationForm.save}"
-                                             process="annotationInputContainer"
-                                             update="@form :scriptContainer"/>
-                            <p:commandButton id="saveAndNextButton" value="Save and Next"
-                                             action="#{annotationForm.saveAndNext}" process="annotationInputContainer"
-                                             update="@form :scriptContainer"/>
-                        </p:outputPanel>
-                    </p:panelGrid>
-
-                    <p:defaultCommand target="saveButton"
-                                      rendered="#{not annotationForm.hasNextAnnotation or not annotatorData.batchMode}"/>
-                    <p:defaultCommand target="saveAndNextButton"
-                                      rendered="#{annotationForm.hasNextAnnotation and annotatorData.batchMode}"/>
-
-                </h:panelGroup>
-            </div>
+<h:form id="sideForm" prependId="false">
+    <div class="row">
+        <!--static position is required in the following, else position information on canvas is calculated wrong-->
+        <div class="col-md-9" style="position: static;">
+            <div id="annotationDivs"></div>
+            <canvas id="annotationCanvas"></canvas>
         </div>
+        <div class="col-md-3">
+            <p:panelGrid style="width: 100%;">
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for="currentFile" value="Current File"/>
+                    </p:column>
+                    <p:column>
+                        <h:selectOneMenu id="currentFile" value="#{annotatorData.currentFileId}">
+                            <f:selectItems value="#{annotator.allFileIds}" var="fileId" itemLabel="#{fileId}"
+                                           itemValue="#{fileId}"/>
+                            <p:ajax process="@this" update="@form :scriptContainer"
+                                    listener="#{annotator.onFileSelect}"/>
+                        </h:selectOneMenu>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column>
+                        <p:outputLabel for="currentPage" value="Current Page"/>
+                    </p:column>
+                    <p:column>
+                        <h:inputText id="currentPage" value="#{annotatorData.currentPageNumber}"
+                                     style="width: 50px;">
+                            <p:ajax process="@this" update="@form :scriptContainer"
+                                    listener="#{annotator.onPageSelect}"/>
+                        </h:inputText>
+
+                        <h:outputFormat value="of {0}" style="white-space: nowrap;">
+                            <f:param value="#{annotator.numberOfPagesForCurrentFile()}"/>
+                        </h:outputFormat>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandLink value="← Previous page" action="#{annotator.previousPage}"
+                                       disabled="#{not annotator.previousPageAvailable}"
+                                       process="@this" update="@form :scriptContainer"
+                                       style="float: left;"/>
+
+                        <p:commandLink value="Next page →" action="#{annotator.nextPage}"
+                                       disabled="#{not annotator.nextPageAvailable}"
+                                       process="@this" update="@form :scriptContainer"
+                                       style="float: right;"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column colspan="2">
+                        <p:commandLink value="Force flush" action="#{annotator.forceFlush}"
+                                       process="@this" update="@this"/>
+                    </p:column>
+                </p:row>
+
+            </p:panelGrid>
+
+            <br/>
+            <br/>
+
+            <p:panelGrid columns="2">
+                <h:outputLabel for="batchModeCheckBox" value="Batch mode"/>
+                <h:selectBooleanCheckbox id="batchModeCheckBox" value="#{annotatorData.batchMode}">
+                    <p:ajax process="@this" update="@form :scriptContainer"/>
+                </h:selectBooleanCheckbox>
+
+                <h:outputLabel id="ignoreEmptyLatinCheckBoxLabel" for="ignoreEmptyLatinCheckBox"
+                               value="Ignore empty latin"/>
+                <h:selectBooleanCheckbox id="ignoreEmptyLatinCheckBox" disabled="#{not annotatorData.batchMode}"
+                                         value="#{annotatorData.ignoreEmptyLatin}">
+                    <p:ajax process="@this" update="@form :scriptContainer"/>
+                </h:selectBooleanCheckbox>
+            </p:panelGrid>
 
 
-    </h:form>
+            <br/>
+            <br/>
+
+            <h:panelGroup id="annotationInputContainer">
+                <p:growl showSummary="true"/>
+
+                <p:focus for="tr_arabic"
+                         rendered="#{empty annotatorData.current.tr_arabic or not empty annotatorData.current.tr_latin}"/>
+                <p:focus for="tr_latin"
+                         rendered="#{not empty annotatorData.current.tr_arabic and empty annotatorData.current.tr_latin}"/>
 
 
-    <!--hidden form to execute remote commands-->
-    <h:form prependId="false" style="visibility: hidden">
-        <p:remoteCommand name="createNewAnnotationBridge" actionListener="#{annotator.createNewAnnotation}"
-                         update="@none" process="@this"
-                         oncomplete="onAnnotationCreateComplete(xhr,status,args);"/>
+                <script type="text/javascript">
+                    function triggerDeleteButton() {
+                        $('#deleteButton').click();
+                    }
+                </script>
 
-        <p:remoteCommand name="selectAnnotationBridge" actionListener="#{annotationForm.selectAnnotation}"
-                         update=":sideForm:annotationInputContainer" process="@this"/>
-    </h:form>
+                <p:hotkey bind="meta+d" handler="triggerDeleteButton();"/>
+                <p:hotkey bind="ctrl+d" handler="triggerDeleteButton();"/>
+
+                <script type="text/javascript">
+                    $(function () {
+                        $(':input').bind('keydown', 'meta+d', function () {
+                            triggerDeleteButton();
+                            return false;
+                        });
+                    });
+                    $(function () {
+                        $(':input').bind('keydown', 'ctrl+d', function () {
+                            triggerDeleteButton();
+                            return false;
+                        });
+                    });
+                </script>
+
+                <p:panelGrid columns="1" rendered="#{not empty annotatorData.current}">
+                    <h:outputText value="Id"/>
+                    <h:outputText value="#{annotatorData.current.annotationId}"/>
+
+                    <h:outputText value="TR_ARABIC"/>
+                    <h:inputText id="tr_arabic" value="#{annotatorData.current.tr_arabic}"
+                                 dir="RTL"/>
+
+                    <h:outputText value="TR_LATIN"/>
+                    <h:inputText id="tr_latin" value="#{annotatorData.current.tr_latin}"/>
+
+                    <h:outputText value="x"/>
+                    <h:inputText value="#{annotatorData.current.x}"/>
+
+                    <h:outputText value="y"/>
+                    <h:inputText value="#{annotatorData.current.y}"/>
+
+                    <h:outputText value="w"/>
+                    <h:inputText value="#{annotatorData.current.w}"/>
+
+                    <h:outputText value="h"/>
+                    <h:inputText value="#{annotatorData.current.h}"/>
+
+                    <p:outputPanel>
+                        <p:commandButton id="deleteButton" value="Delete" action="#{annotationForm.delete}"
+                                         process="@this"
+                                         update="@form :scriptContainer"/>
+                        <p:commandButton id="saveButton" value="Save" action="#{annotationForm.save}"
+                                         process="annotationInputContainer"
+                                         update="@form :scriptContainer"/>
+                        <p:commandButton id="saveAndNextButton" value="Save and Next"
+                                         action="#{annotationForm.saveAndNext}" process="annotationInputContainer"
+                                         update="@form :scriptContainer"/>
+                    </p:outputPanel>
+                </p:panelGrid>
+
+                <p:defaultCommand target="saveButton"
+                                  rendered="#{not annotationForm.hasNextAnnotation or not annotatorData.batchMode}"/>
+                <p:defaultCommand target="saveAndNextButton"
+                                  rendered="#{annotationForm.hasNextAnnotation and annotatorData.batchMode}"/>
+
+            </h:panelGroup>
+        </div>
+    </div>
+
+
+</h:form>
+
+
+<!--hidden form to execute remote commands-->
+<h:form prependId="false" style="visibility: hidden">
+    <p:remoteCommand name="createNewAnnotationBridge" actionListener="#{annotator.createNewAnnotation}"
+                     update="@none" process="@this"
+                     oncomplete="onAnnotationCreateComplete(xhr,status,args);"/>
+
+    <p:remoteCommand name="selectAnnotationBridge" actionListener="#{annotationForm.selectAnnotation}"
+                     update=":sideForm:annotationInputContainer" process="@this"/>
+</h:form>
 
 </ui:define>
 
