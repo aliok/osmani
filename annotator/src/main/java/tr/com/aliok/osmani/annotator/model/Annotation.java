@@ -167,7 +167,7 @@ public class Annotation implements Serializable, Comparable {
                 .append(this.fileId, other.fileId)
                 .append(this.pageNumber, other.pageNumber)
                 .append(getCenterOfGravityY(), other.getCenterOfGravityY())
-                .append(-getCenterOfGravityX(), other.getCenterOfGravityX())
+                .append(-getCenterOfGravityX(), -other.getCenterOfGravityX())
                 .append(this.annotationId, other.annotationId)
                 .toComparison();
     }
