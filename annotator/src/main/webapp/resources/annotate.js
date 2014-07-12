@@ -185,6 +185,26 @@ function Annotator(options) {
         $('.annotationOutlineWrapper.selected').removeClass('selected');
     }
 
+    self.hasCurrent = function () {
+        return $('.annotationOutlineWrapper.selected .annotationOutline').length
+    };
+
+    self.getCurrentX = function () {
+        return $('.annotationOutlineWrapper.selected .annotationOutline').css('left');
+    };
+
+    self.getCurrentY = function () {
+        return $('.annotationOutlineWrapper.selected .annotationOutline').css('top');
+    };
+
+    self.getCurrentW = function () {
+        return $('.annotationOutlineWrapper.selected .annotationOutline').css('width');
+    };
+
+    self.getCurrentH = function () {
+        return $('.annotationOutlineWrapper.selected .annotationOutline').css('height');
+    };
+
     function redraw() {
         canvas.width = canvas.width; // Clears the canvas
         $('#annotationDivs').html("");  // Clears it
