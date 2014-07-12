@@ -53,8 +53,12 @@
 }
 
 .annotationOutlineWrapper.hover .annotationDeleteButtonDiv,
-.annotationOutlineWrapper.selected .annotationDeleteButtonDiv {
+.annotationOutlineWrapper.selected.hover .annotationDeleteButtonDiv{
     display: block;
+}
+
+.annotationOutlineWrapper.selected .annotationDeleteButtonDiv{
+    display: none;
 }
 
 .annotationOutlineWrapper.noArabic .annotationOutline {
