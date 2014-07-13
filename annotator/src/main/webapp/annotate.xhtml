@@ -113,6 +113,13 @@
                                          value="#{annotatorData.ignoreEmptyLatin}">
                     <p:ajax process="@this" update="@form :scriptContainer"/>
                 </h:selectBooleanCheckbox>
+
+                <h:outputLabel id="areaSelectionModeLabel" for="areaSelectionModeCheckBox"
+                               value="Area selection mode"/>
+                <h:selectBooleanCheckbox id="areaSelectionModeCheckBox" disabled="#{not annotatorData.batchMode}"
+                                         value="#{annotatorData.areaSelectionMode}">
+                    <p:ajax process="@this" update="@form :scriptContainer"/>
+                </h:selectBooleanCheckbox>
             </p:panelGrid>
 
 
@@ -225,62 +232,6 @@
 </ui:define>
 
 <ui:define name="script">
-    <script>
-        $(document).ready(function () {
-            $(document).on('focus', '#sideForm input', function () {
-                var annotator = window['annotator'];
-                if (annotator) {
-                    var $realInput = $(this);
-                    var $bigInput = $('#bigInput');
-                    $bigInput.focus();
-                    $bigInput.off('keypress');
-                    $bigInput.off('focus');
-                    $bigInput.off('blur');
-
-                    $bigInput.keypress(function (e) {
-                        $realInput.keypress(e);
-                    });
-                }
-
-            });
-        });
-
-        $(document).ready(function () {
-            $(document).on('blur', '#sideForm input, #sideForm textarea', function () {
-                $('#sideForm tr').removeClass('focusedInputRow');
-            });
-
-            $(document).on('focus', '#sideForm input, #sideForm textarea', function () {
-                $('#sideForm tr').removeClass('focusedInputRow');
-                var annotator = window['annotator'];
-                if (annotator) {
-                    if (annotator.hasCurrent()) {
-                        var input = $(this);
-
-                        var x = parseInt(annotator.getCurrentX().replace(/px/, ""));
-                        var y = parseInt(annotator.getCurrentY().replace(/px/, ""));
-                        var w = parseInt(annotator.getCurrentW().replace(/px/, ""));
-                        var h = parseInt(annotator.getCurrentH().replace(/px/, ""));
-
-                        var xOffset = 0;
-                        if (input.attr('dir') == 'RTL')
-                            xOffset = 475;
-                        else
-                            xOffset = 150;
-
-                        var canvasOffset = $('#annotationCanvas').offset()
-
-                        var inputRow = input.closest('tr');
-                        inputRow.addClass('focusedInputRow');
-                        inputRow.css('top', (canvasOffset.top + y - 60) + "px");
-                        inputRow.css('left', (canvasOffset.left + x + w - xOffset) + "px");
-                    }
-                }
-
-            });
-        });
-    </script>
-
     <h:outputScript name="annotate.js"/>
 
     <h:panelGroup id="scriptContainer">
@@ -316,6 +267,50 @@
             //                        }
             //                    }
             //                ];
+
+            var areaSelectionMode = #{annotatorData.areaSelectionMode};
+
+            $(document).ready(function () {
+
+                $(document).on('blur', '#sideForm input, #sideForm textarea', function () {
+                    $('#sideForm tr').removeClass('focusedInputRow');
+                });
+
+                if (!areaSelectionMode) {
+                    console.log("areaSelectionMode=false");
+                    $(document).on('focus', '#sideForm input, #sideForm textarea', function () {
+                        $('#sideForm tr').removeClass('focusedInputRow');
+                        var annotator = window['annotator'];
+                        if (annotator) {
+                            if (annotator.hasCurrent()) {
+                                var input = $(this);
+
+                                var x = parseInt(annotator.getCurrentX().replace(/px/, ""));
+                                var y = parseInt(annotator.getCurrentY().replace(/px/, ""));
+                                var w = parseInt(annotator.getCurrentW().replace(/px/, ""));
+                                var h = parseInt(annotator.getCurrentH().replace(/px/, ""));
+
+                                var xOffset = 0;
+                                if (input.attr('dir') == 'RTL')
+                                    xOffset = 475;
+                                else
+                                    xOffset = 150;
+
+                                var canvasOffset = $('#annotationCanvas').offset()
+
+                                var inputRow = input.closest('tr');
+                                inputRow.addClass('focusedInputRow');
+                                inputRow.css('top', (canvasOffset.top + y - 60) + "px");
+                                inputRow.css('left', (canvasOffset.left + x + w - xOffset) + "px");
+                            }
+                        }
+
+                    });
+                }
+                else{
+                    $(document).off('focus', '#sideForm input, #sideForm textarea');
+                }
+            });
 
             var imageSource = "/getImage?fileId=#{annotatorData.currentFileId}&amp;pageNumber=#{annotatorData.currentPageNumber}";
 
@@ -373,7 +368,8 @@
                     'onAnnotationCreate': createNewAnnotation,
                     'onAnnotationSelect': selectAnnotation,
                     'onAnnotationDelete': deleteAnnotation,
-                    'annotations': annotations
+                    'annotations': annotations,
+                    'areaSelectionMode' : areaSelectionMode
                 });
 
             });

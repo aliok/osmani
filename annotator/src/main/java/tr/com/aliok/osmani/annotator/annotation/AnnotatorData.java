@@ -20,6 +20,7 @@ public class AnnotatorData implements Serializable {
 
     private boolean batchMode = true;
     private boolean ignoreEmptyLatin = true;
+    private boolean areaSelectionMode = false;
 
     public String getCurrentFileId() {
         return currentFileId;
@@ -51,6 +52,14 @@ public class AnnotatorData implements Serializable {
 
     public void setIgnoreEmptyLatin(boolean ignoreEmptyLatin) {
         this.ignoreEmptyLatin = ignoreEmptyLatin;
+    }
+
+    public boolean isAreaSelectionMode() {
+        return areaSelectionMode;
+    }
+
+    public void setAreaSelectionMode(boolean areaSelectionMode) {
+        this.areaSelectionMode = areaSelectionMode;
     }
 
     public Annotation getCurrent() {
