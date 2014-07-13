@@ -38,6 +38,8 @@ function Annotator(options) {
     $('#annotationDivs').html("");  // Clears it
     if(options.areaSelectionMode)
         $('body').addClass('areaSelectionMode');
+    else
+        $('body').removeClass('areaSelectionMode');
 
     $(canvas).mousedown(function (e) {
         var mouseX = e.pageX - this.offsetLeft;

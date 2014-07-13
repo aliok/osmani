@@ -130,9 +130,9 @@
                 <p:growl showSummary="true"/>
 
                 <p:focus for="tr_arabic"
-                         rendered="#{empty annotatorData.current.tr_arabic or not empty annotatorData.current.tr_latin}"/>
+                         rendered="#{not annotatorData.areaSelectionMode and empty annotatorData.current.tr_arabic or not empty annotatorData.current.tr_latin}"/>
                 <p:focus for="tr_latin"
-                         rendered="#{not empty annotatorData.current.tr_arabic and empty annotatorData.current.tr_latin}"/>
+                         rendered="#{not annotatorData.areaSelectionMode and not empty annotatorData.current.tr_arabic and empty annotatorData.current.tr_latin}"/>
 
 
                 <script type="text/javascript">
