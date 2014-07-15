@@ -1,0 +1,10 @@
+# ignore IntelliJ Idea config folder
+.idea
+
+# ignore other IntelliJ files
+atlassian-ide-plugin.xml
+*.iml
+
+# ignore os x file
+.DS_Store
+
