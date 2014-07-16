@@ -1,2 +1,4 @@
 Validaton:
 No ى in between! Only ي
+No ي in word ends! Only ى
+
