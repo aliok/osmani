@@ -70,7 +70,7 @@
                         </h:inputText>
 
                         <h:outputFormat value="of {0}" style="white-space: nowrap;">
-                            <f:param value="#{annotator.numberOfPagesForCurrentFile()}"/>
+                            <f:param value="#{annotator.numberOfPagesForCurrentFile() -1}"/>
                         </h:outputFormat>
                     </p:column>
                 </p:row>
