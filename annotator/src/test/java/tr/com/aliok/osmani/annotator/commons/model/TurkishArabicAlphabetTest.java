@@ -45,7 +45,7 @@ public class TurkishArabicAlphabetTest {
         final Iterable<File> annotationFiles = Iterables.filter(Arrays.asList(allFiles), new Predicate<File>() {
             @Override
             public boolean apply(File input) {
-                return FilenameUtils.getExtension(input.getName()).equalsIgnoreCase("txt");
+                return FilenameUtils.getName(input.getName()).toLowerCase().endsWith(".annotation.txt");
             }
         });
 
