@@ -17,12 +17,15 @@ import java.util.Set;
  */
 public class AnnotationArabicToLatinConsistencyValidationRule implements AnnotationValidationRule {
     private static ImmutableSet<String> ALLOWED_AMBIGUOUS_WORDS = ImmutableSet.of(
-            "\u0627\u0648\u0646",           // un - on
-            "\u062f\u06d5",                 // da - de
-            "\u0642\u0648\u0634",           // kus -kos
-            "\u0628\u0648\u0632",           // buz - boz
-            "\u0645\u064a\u0633\u06ad",     // misin - musun
-            "\u0645\u062d\u0645\u062f"      // muhammed - mehmed
+            "\u0627\u0648\u0646",                   // un - on
+            "\u062f\u06d5",                         // da - de
+            "\u0642\u0648\u0634",                   // kus -kos
+            "\u0628\u0648\u0632",                   // buz - boz
+            "\u0645\u064a\u0633\u06ad",             // misin - musun
+            "\u0645\u062d\u0645\u062f",             // muhammed - mehmed
+            "\u0627\u0648\u0644\u062f\u0649",       // oldu - oldu
+            "\u06af\u0648\u0644",                   // gul - gol
+            "\u0635\u0649"                          // si - su (kaynastirma)
 
     );
 
