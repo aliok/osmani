@@ -36,8 +36,8 @@ public class AnnotationDataController implements Serializable {
     TreeMap<String, SetUniqueList> pageNumberMap = Maps.newTreeMap();
 
     // keep all annotation in the table, not just current file or current page
-    // Table<FileID, PageNumber, TreeSet<Annotation>
-    // marking specificatlly treeset to mark that it is ordered
+    // Table<FileID, PageNumber, TreeSet<Annotation>>
+    // marking specifically treeset to mark that it is ordered
     private TreeBasedTable<String, Integer, TreeSet<Annotation>> annotationTable = TreeBasedTable.create();
     private int flushCounter = 0;
 

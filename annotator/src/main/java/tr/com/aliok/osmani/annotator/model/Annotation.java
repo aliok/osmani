@@ -10,7 +10,7 @@ import java.io.Serializable;
  */
 public class Annotation implements Serializable, Comparable {
 
-    private static final double SAME_LINE_ASSUMPTION_DIFF = 15;
+    private static final int SAME_LINE_ASSUMPTION_DIFF = 15;
 
     private String fileId;
     private int pageNumber;
@@ -165,8 +165,8 @@ public class Annotation implements Serializable, Comparable {
         Validate.isInstanceOf(Annotation.class, o);
         final Annotation other = (Annotation) o;
 
-        double centerOfGravityY = getCenterOfGravityY();
-        double centerOfGravityYOther = other.getCenterOfGravityY();
+        int centerOfGravityY = getCenterOfGravityY();
+        int centerOfGravityYOther = other.getCenterOfGravityY();
 
         // if there is too small difference, assume they are in the same line!
         if (Math.abs(centerOfGravityY - centerOfGravityYOther) < SAME_LINE_ASSUMPTION_DIFF) {
@@ -183,11 +183,11 @@ public class Annotation implements Serializable, Comparable {
                 .toComparison();
     }
 
-    public double getCenterOfGravityX() {
-        return this.x + w / 2;
+    public int getCenterOfGravityX() {
+        return (int) (this.x + w / 2);
     }
 
-    public double getCenterOfGravityY() {
-        return this.y + h / 2;
+    public int getCenterOfGravityY() {
+        return (int) (this.y + h / 2);
     }
 }
