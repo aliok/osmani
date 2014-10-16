@@ -165,16 +165,17 @@
 
                     <h:outputText value="TR_ARABIC"/>
                     <h:inputText id="tr_arabic" value="#{annotatorData.current.tr_arabic}" style="font-size: xx-large;"
+                                 styleClass="supports-focus"
                                  dir="RTL"/>
 
                     <h:outputText value="TR_LATIN"/>
-                    <h:inputText id="tr_latin" value="#{annotatorData.current.tr_latin}"/>
+                    <h:inputText id="tr_latin" value="#{annotatorData.current.tr_latin}" styleClass="supports-focus"/>
 
                     <h:outputText value="TR_LATIN2"/>
-                    <h:inputText id="tr_latin2" value="#{annotatorData.current.tr_latin2}"/>
+                    <h:inputText id="tr_latin2" value="#{annotatorData.current.tr_latin2}" styleClass="supports-focus"/>
 
                     <h:outputText value="DESCRIPTION"/>
-                    <h:inputTextarea value="#{annotatorData.current.description}"/>
+                    <h:inputTextarea value="#{annotatorData.current.description}" styleClass="supports-focus"/>
 
                     <h:outputText value="x"/>
                     <h:inputText value="#{annotatorData.current.x}"/>
@@ -272,13 +273,13 @@
 
             $(document).ready(function () {
 
-                $(document).on('blur', '#sideForm input, #sideForm textarea', function () {
+                $(document).on('blur', '#sideForm .supports-focus', function () {
                     $('#sideForm tr').removeClass('focusedInputRow');
                 });
 
                 if (!areaSelectionMode) {
                     console.log("areaSelectionMode=false");
-                    $(document).on('focus', '#sideForm input, #sideForm textarea', function () {
+                    $(document).on('focus', '#sideForm .supports-focus', function () {
                         $('#sideForm tr').removeClass('focusedInputRow');
                         var annotator = window['annotator'];
                         if (annotator) {
